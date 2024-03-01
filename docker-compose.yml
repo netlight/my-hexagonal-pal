@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  mongo:
+    restart: always
+    image: mongo:7.0.5
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_volume:/data/db
+volumes:
+  mongo_volume:
