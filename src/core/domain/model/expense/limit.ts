@@ -1,12 +1,9 @@
-import { AppError } from "../../../../infrastructure/adapter/in/express/middleware/errorHandler";
+import NegativeLimitError from "../../error/negativeLimitError";
 
 class Limit {
   constructor(public amount: number) {
     if (amount < 0) {
-      throw new AppError(
-        "InvalidLimit",
-        `Limits cannot be negative: ${amount}`,
-      );
+      throw new NegativeLimitError(amount);
     }
   }
 }

@@ -1,12 +1,19 @@
 import type BudgetPersistencePort from "../../../../../../core/application/port/budgetPersistencePort";
 import { BudgetEntityConverter } from "./entity/converters";
 import { BudgetModel } from "./models";
+import BudgetEntity from "./entity/budgetEntity";
 
-export const insert: BudgetPersistencePort["persist"] = async (summary) => {
+export const upsert: BudgetPersistencePort["persist"] = async (summary) => {
   const entity = BudgetEntityConverter.toEntity(summary);
-  const model = new BudgetModel(entity);
-  const insertedBudget = await model.save();
-  return BudgetEntityConverter.toDomain(insertedBudget);
+  const upserted = <BudgetEntity>await BudgetModel.findOneAndUpdate(
+    { id: entity.id },
+    entity,
+    {
+      upsert: true,
+      returnDocument: "after",
+    },
+  );
+  return BudgetEntityConverter.toDomain(upserted);
 };
 
 export const findById: BudgetPersistencePort["getById"] = async (id) => {
@@ -31,17 +38,11 @@ export const findAllByIncomeId: BudgetPersistencePort["getAllByIncomeId"] =
     return entities.map(BudgetEntityConverter.toDomain);
   };
 
-export const findAll: BudgetPersistencePort["getAll"] = async () => {
-  const entities = await BudgetModel.find();
-  return entities.map(BudgetEntityConverter.toDomain);
-};
-
 const BudgetMongoPersistenceAdapter: BudgetPersistencePort = {
   getById: findById,
   getByExpenseId: findByExpenseId,
   getAllByIncomeId: findAllByIncomeId,
-  getAll: findAll,
-  persist: insert,
+  persist: upsert,
 };
 
 export default BudgetMongoPersistenceAdapter;

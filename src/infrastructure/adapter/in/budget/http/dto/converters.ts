@@ -9,10 +9,10 @@ import { IncomeId } from "../../../../../../core/domain/model/income/income";
 import Limit from "../../../../../../core/domain/model/expense/limit";
 
 export const NewBudgetDtoConverter = {
-  toDomain: (dto: NewBudgetDto): Budget =>
+  toDomain: (incomeId: string, dto: NewBudgetDto): Budget =>
     new Budget(
       new BudgetId(),
-      new IncomeId(dto.incomeId),
+      new IncomeId(incomeId),
       dto.name,
       new Limit(dto.limit),
       [],

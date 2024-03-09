@@ -7,7 +7,6 @@ interface BudgetPersistencePort {
   getByExpenseId: (id: ExpenseId) => Promise<Budget | undefined>;
   persist: (budget: Budget) => Promise<Budget>;
   getAllByIncomeId: (id: IncomeId) => Promise<Budget[]>;
-  getAll: () => Promise<Budget[]>;
 }
 
 export default BudgetPersistencePort;

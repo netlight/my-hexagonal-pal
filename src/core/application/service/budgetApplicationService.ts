@@ -1,7 +1,8 @@
 import type { Budget, BudgetId } from "../../domain/model/expense/budget";
-import { AppError } from "../../../infrastructure/adapter/in/express/middleware/errorHandler";
 import { type ExpenseId } from "../../domain/model/expense/expense";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
+import BudgetNotFoundError from "../../domain/error/budget/budgetNotFoundError";
+import ExpenseNotFoundError from "../../domain/error/expense/expenseNotFoundError";
 
 export interface BudgetApplicationService {
   getById: (id: BudgetId) => Promise<Budget>;
@@ -13,10 +14,7 @@ export const getBudgetById: (ports: {
 }) => BudgetApplicationService["getById"] = (ports) => async (id) => {
   const budget = await ports.getBudgetBy(id);
   if (budget === undefined) {
-    throw new AppError(
-      "BudgetNotFound",
-      `Budget with id ${id.value} not found`,
-    );
+    throw new BudgetNotFoundError(id);
   }
 
   return budget;
@@ -27,10 +25,7 @@ export const getBudgetByExpenseId: (ports: {
 }) => BudgetApplicationService["getByExpenseId"] = (ports) => async (id) => {
   const budget = await ports.getBudgetBy(id);
   if (budget === undefined) {
-    throw new AppError(
-      "BudgetNotFound",
-      `Budget with expense having id ${id.value} not found`,
-    );
+    throw new ExpenseNotFoundError(id);
   }
 
   return budget;

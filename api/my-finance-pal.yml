@@ -10,13 +10,18 @@ tags:
     description: Managing budgets
   - name: incomes
     description: Earn money
+servers:
+  - url: http://localhost:3000
+    description: Local Development
 paths:
-  /budgets:
+  /incomes/{incomeId}/budgets:
     post:
       tags:
         - budgets
       description: Create a new budget
       operationId: createBudget
+      parameters:
+        - $ref: "#/components/parameters/IncomeIdParam"
       requestBody:
         required: true
         content:
@@ -32,6 +37,22 @@ paths:
                 $ref: "#/components/schemas/Budget"
         400:
           description: Invalid budget
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Income for new budget not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Sum of spendings of new budget and existing budgets is bigger than total income
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     get:
       tags:
         - budgets
@@ -46,18 +67,15 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Budget"
-  /budgets/{budgetId}/expenses:
+  /incomes/{incomeId}/budgets/{budgetId}/expenses:
     post:
       tags:
         - expenses
       description: Register a new expense for a budget
       operationId: trackExpense
       parameters:
-        - in: path
-          name: budgetId
-          required: true
-          schema:
-            $ref: "#/components/parameters/BudgetIdParam"
+        - $ref: "#/components/parameters/BudgetIdParam"
+        - $ref: "#/components/parameters/IncomeIdParam"
       requestBody:
         required: true
         content:
@@ -73,6 +91,16 @@ paths:
                 $ref: "#/components/schemas/Expense"
         404:
           description: Budget not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Expense date out of budget bounds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /incomes:
     post:
       tags:
@@ -113,15 +141,11 @@ paths:
       description: Add a new source for a single income
       operationId: addIncomeSource
       parameters:
-        - in: path
-          name: incomeId
-          required: true
-          schema:
-            $ref: "#/components/schemas/IncomeId"
+        - $ref: "#/components/parameters/IncomeIdParam"
       requestBody:
         required: true
         content:
-          applicaton/json:
+          application/json:
             schema:
               $ref: "#/components/schemas/NewIncomeSource"
       responses:
@@ -131,8 +155,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/IncomeSource"
+        400:
+          description: Invalid income payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         404:
           description: Income not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   parameters:
@@ -142,12 +176,12 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/BudgetId"
-    ExpenseIdParam:
+    IncomeIdParam:
       in: path
-      name: expenseId
+      name: incomeId
       required: true
       schema:
-        $ref: "#/components/schemas/ExpenseId"
+        $ref: "#/components/schemas/IncomeId"
   schemas:
     IncomeSourceId:
       type: string
@@ -215,12 +249,9 @@ components:
       type: object
       description: Budget to be created
       required:
-        - incomeId
         - name
         - limit
       properties:
-        incomeId:
-          $ref: "#/components/schemas/IncomeId"
         name:
           type: string
           description: The name of the budget
@@ -246,10 +277,13 @@ components:
           description: Planned money to be available for tracking expenses related to a certain purpose over a period of time
           required:
             - id
+            - incomeId
             - expenses
           properties:
             id:
               $ref: "#/components/schemas/BudgetId"
+            incomeId:
+              $ref: "#/components/schemas/IncomeId"
             expenses:
               type: array
               items:
@@ -289,3 +323,14 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/ExpenseId"
+    Error:
+      type: object
+      description: Error response
+      required:
+        - message
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true

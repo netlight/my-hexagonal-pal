@@ -3,7 +3,11 @@ import { v4 as uuidv4, validate as uuidValidate } from "uuid";
 
 const uuidGenerator: UniqueIdGenerator = {
   generate: uuidv4,
-  validate: uuidValidate,
+  validate: (id) => {
+    if (!uuidValidate(id)) {
+      return [{ description: `Invalid UUID ${id}` }];
+    }
+  },
 };
 
 export default uuidGenerator;
