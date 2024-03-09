@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-import type ExpenseEntity from "../entity/expenseEntity";
+import { ExpenseDto } from "../../../../../in/expense/http/dto/expense";
 
 const Types = Schema.Types;
 
-const expenseSchema = new mongoose.Schema<ExpenseEntity>(
+const expenseSchema = new mongoose.Schema<ExpenseDto>(
   {
-    id: Types.UUID,
+    id: Types.String,
     description: Types.String,
     amount: Types.Number,
     date: Types.Date,

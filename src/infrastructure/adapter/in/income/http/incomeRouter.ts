@@ -1,68 +1,76 @@
 import { type Request, type Response, Router } from "express";
-import type { NewBudgetDto } from "../../budget/http/dto/budget";
 import { StatusCodes } from "http-status-codes";
 import toExpressPath from "../../express/routes/toExpressPath";
 import apiPaths from "../../express/routes/apiPaths";
 import asyncHandler from "express-async-handler";
-import { type CreateIncomeUseCase } from "../../../../../core/application/usecase/createIncomeUseCase";
-import { IncomeDtoConverter, IncomeSourceDtoConverter } from "./dto/converter";
-import { type AddIncomeSourceUseCase } from "../../../../../core/application/usecase/addIncomeSourceUseCase";
-import { type GetIncomesUseCase } from "../../../../../core/application/usecase/getIncomesUseCase";
-import { type NewIncomeSourceDto } from "./dto/income";
-import { IncomeId } from "../../../../../core/domain/model/income/income";
+import {
+  IncomeDto,
+  IncomeSourceDto,
+  NewIncomeDto,
+  type NewIncomeSourceDto,
+} from "./dto/income";
+import { v4 as uuidv4 } from "uuid";
+import { IncomeModel } from "../../../out/income/persistence/mongo/models";
+import { AppError } from "../../express/middleware/error/errorHandler";
 
-export const createIncome =
-  (createIncome: CreateIncomeUseCase) =>
-  async (req: Request, res: Response): Promise<void> => {
-    const dto: NewBudgetDto = req.body;
-    const newIncome = IncomeDtoConverter.toDomain(dto);
-    const createdIncome = await createIncome(newIncome);
+export const createIncome = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const newIncomeDto: NewIncomeDto = req.body;
+  const newIncome: IncomeDto = { ...newIncomeDto, id: uuidv4(), sources: [] };
+  await new IncomeModel(newIncome).save();
 
-    res
-      .status(StatusCodes.CREATED)
-      .json(IncomeDtoConverter.toDto(createdIncome));
-  };
+  res.status(StatusCodes.CREATED).json(newIncome);
+};
 
-export const addIncomeSource =
-  (addIncomeSource: AddIncomeSourceUseCase) =>
-  async (req: Request, res: Response): Promise<void> => {
-    const dto: NewIncomeSourceDto = req.body;
-    const incomeId = req.params.incomeId;
-    const newIncomeSource = IncomeSourceDtoConverter.toDomain(dto);
-    const createdIncomeSource = await addIncomeSource(
-      new IncomeId(incomeId),
-      newIncomeSource,
+export const addIncomeSource = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const newIncomeSourceDto: NewIncomeSourceDto = req.body;
+  const incomeId = req.params.incomeId;
+
+  if (newIncomeSourceDto.amount <= 0) {
+    throw new AppError(
+      "NegativeIncomeSource",
+      `Income source needs to be positive, but was ${newIncomeSourceDto.amount}`,
+      400,
     );
-
-    res
-      .status(StatusCodes.CREATED)
-      .json(IncomeSourceDtoConverter.toDto(createdIncomeSource));
+  }
+  const newIncomeSource: IncomeSourceDto = {
+    ...newIncomeSourceDto,
+    id: uuidv4(),
   };
+  const income = await IncomeModel.findOne({ id: incomeId });
+  if (income === undefined || income === null) {
+    throw new AppError(
+      "IncomeNotFound",
+      `Income with id ${incomeId} does not exist`,
+      404,
+    );
+  }
+  income.sources.push(newIncomeSource);
+  await IncomeModel.updateOne({ id: incomeId }, income);
 
-export const getIncomes =
-  (getIncomes: GetIncomesUseCase) =>
-  async (req: Request, res: Response): Promise<void> => {
-    const incomes = await getIncomes();
-    res.status(StatusCodes.OK).json(incomes.map(IncomeDtoConverter.toDto));
-  };
+  res.status(StatusCodes.CREATED).json(newIncomeSource);
+};
 
-const IncomeRouter = (
-  getIncomesUseCase: GetIncomesUseCase,
-  createIncomeUseCase: CreateIncomeUseCase,
-  addIncomeSourceUseCase: AddIncomeSourceUseCase,
-): Router => {
+export const getIncomes = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const incomes = await IncomeModel.find();
+  res.status(StatusCodes.OK).json(incomes);
+};
+
+const IncomeRouter = (): Router => {
   const router = Router();
-  router.get(
-    toExpressPath(apiPaths.getAllIncomes),
-    asyncHandler(getIncomes(getIncomesUseCase)),
-  );
-  router.post(
-    toExpressPath(apiPaths.createIncome),
-    asyncHandler(createIncome(createIncomeUseCase)),
-  );
+  router.get(toExpressPath(apiPaths.getAllIncomes), asyncHandler(getIncomes));
+  router.post(toExpressPath(apiPaths.createIncome), asyncHandler(createIncome));
   router.post(
     toExpressPath(apiPaths.addIncomeSource),
-    asyncHandler(addIncomeSource(addIncomeSourceUseCase)),
+    asyncHandler(addIncomeSource),
   );
 
   return router;

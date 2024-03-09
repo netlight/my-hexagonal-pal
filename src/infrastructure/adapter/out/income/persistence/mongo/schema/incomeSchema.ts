@@ -1,12 +1,12 @@
 import mongoose, { Schema } from "mongoose";
-import type IncomeEntity from "../entity/IncomeEntity";
 import incomeSourceSchema from "./incomeSourceSchema";
+import { IncomeDto } from "../../../../../in/income/http/dto/income";
 
 const Types = Schema.Types;
 
-const incomeSchema = new mongoose.Schema<IncomeEntity>(
+const incomeSchema = new mongoose.Schema<IncomeDto>(
   {
-    id: Types.UUID,
+    id: Types.String,
     name: Types.String,
     sources: [incomeSourceSchema],
   },

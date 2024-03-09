@@ -1,13 +1,13 @@
 import mongoose, { Schema } from "mongoose";
-import type BudgetEntity from "../entity/budgetEntity";
 import expenseSchema from "./expenseSchema";
+import { BudgetDto } from "../../../../../in/budget/http/dto/budget";
 
 const Types = Schema.Types;
 
-const budgetSummarySchema = new mongoose.Schema<BudgetEntity>(
+const budgetSummarySchema = new mongoose.Schema<BudgetDto>(
   {
-    id: Types.UUID,
-    incomeId: Types.UUID,
+    id: Types.String,
+    incomeId: Types.String,
     name: Types.String,
     limit: Types.Number,
     expenses: [expenseSchema],

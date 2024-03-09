@@ -1,48 +1,70 @@
 import { type Request, type Response, Router } from "express";
 import asyncHandler from "express-async-handler";
-import { type NewBudgetDto } from "./dto/budget";
+import { BudgetDto, type NewBudgetDto } from "./dto/budget";
 import { StatusCodes } from "http-status-codes";
-import { BudgetDtoConverter, NewBudgetDtoConverter } from "./dto/converters";
 import toExpressPath from "../../express/routes/toExpressPath";
 import apiPaths from "../../express/routes/apiPaths";
-import type { CreateBudgetUseCase } from "../../../../../core/application/usecase/createBudgetUseCase";
-import { type GetBudgetsUseCase } from "../../../../../core/application/usecase/getBudgetsUseCase";
-import { IncomeId } from "../../../../../core/domain/model/income/income";
+import { IncomeModel } from "../../../out/income/persistence/mongo/models";
+import { AppError } from "../../express/middleware/error/errorHandler";
+import { BudgetModel } from "../../../out/budget/persistence/mongo/models";
+import { v4 as uuidv4 } from "uuid";
 
-export const createBudget =
-  (createBudget: CreateBudgetUseCase) =>
-  async (req: Request, res: Response): Promise<void> => {
-    const dto: NewBudgetDto = req.body;
-    const incomeId = req.params.incomeId;
-    const newBudget = NewBudgetDtoConverter.toDomain(incomeId, dto);
-    const createdBudget = await createBudget(newBudget);
-
-    res
-      .status(StatusCodes.CREATED)
-      .json(BudgetDtoConverter.toDto(createdBudget));
+export const createBudget = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const newBudgetDto: NewBudgetDto = req.body;
+  const incomeId = req.params.incomeId;
+  const newBudget: BudgetDto = {
+    ...newBudgetDto,
+    incomeId,
+    expenses: [],
+    id: uuidv4(),
   };
 
-export const getBudgets =
-  (getBudgetsBy: GetBudgetsUseCase) =>
-  async (req: Request, res: Response): Promise<void> => {
-    const incomeId = req.params.incomeId;
-    const budgets = await getBudgetsBy(new IncomeId(incomeId));
-    res.status(StatusCodes.OK).json(budgets.map(BudgetDtoConverter.toDto));
-  };
+  const income = await IncomeModel.findOne({ id: incomeId });
+  if (income === undefined || income === null) {
+    throw new AppError(
+      "IncomeNotFound",
+      `Income with id ${incomeId} not found`,
+      404,
+    );
+  }
 
-const BudgetRouter = (
-  createUseCase: CreateBudgetUseCase,
-  getAllUseCase: GetBudgetsUseCase,
-): Router => {
+  const existingBudgets: BudgetDto[] = await BudgetModel.find({ incomeId });
+  const totalSpent = existingBudgets
+    .concat(newBudget)
+    .reduce((prev, curr) => prev + curr.limit, 0);
+  const totalIncome = income.sources.reduce(
+    (prev, curr) => prev + curr.amount,
+    0,
+  );
+  if (totalSpent > totalIncome) {
+    throw new AppError(
+      "BudgetOverspending",
+      `Sum of budget expenses (${totalSpent}) is bigger than income (${totalIncome})`,
+      409,
+    );
+  }
+
+  await new BudgetModel(newBudget).save();
+
+  res.status(StatusCodes.CREATED).json(newBudget);
+};
+
+export const getBudgets = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const incomeId = req.params.incomeId;
+  const budgets = await BudgetModel.find({ incomeId });
+  res.status(StatusCodes.OK).json(budgets);
+};
+
+const BudgetRouter = (): Router => {
   const router = Router();
-  router.post(
-    toExpressPath(apiPaths.createBudget),
-    asyncHandler(createBudget(createUseCase)),
-  );
-  router.get(
-    toExpressPath(apiPaths.getBudgets),
-    asyncHandler(getBudgets(getAllUseCase)),
-  );
+  router.post(toExpressPath(apiPaths.createBudget), asyncHandler(createBudget));
+  router.get(toExpressPath(apiPaths.getBudgets), asyncHandler(getBudgets));
 
   return router;
 };

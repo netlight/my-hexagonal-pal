@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import type BudgetEntity from "./entity/budgetEntity";
 import budgetSchema from "./schema/budgetSchema";
+import { BudgetDto } from "../../../../in/budget/http/dto/budget";
 
-export const BudgetModel = mongoose.model<BudgetEntity>(
+export const BudgetModel = mongoose.model<BudgetDto>(
   "Budget",
   budgetSchema,
   "budgets",
