@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { ExpenseDto } from "../../../../../in/expense/http/dto/expense";
+import { ExpenseDto } from "../../../router/dto/expense";
 
 const Types = Schema.Types;
 

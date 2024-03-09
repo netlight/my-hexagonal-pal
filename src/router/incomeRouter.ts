@@ -1,7 +1,7 @@
 import { type Request, type Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import toExpressPath from "../../express/routes/toExpressPath";
-import apiPaths from "../../express/routes/apiPaths";
+import toExpressPath from "./toExpressPath";
+import apiPaths from "./apiPaths";
 import asyncHandler from "express-async-handler";
 import {
   IncomeDto,
@@ -10,8 +10,8 @@ import {
   type NewIncomeSourceDto,
 } from "./dto/income";
 import { v4 as uuidv4 } from "uuid";
-import { IncomeModel } from "../../../out/income/persistence/mongo/models";
-import { AppError } from "../../express/middleware/error/errorHandler";
+import { IncomeModel } from "../mongo/income/models";
+import { AppError } from "../middleware/errorHandler";
 
 export const createIncome = async (
   req: Request,
