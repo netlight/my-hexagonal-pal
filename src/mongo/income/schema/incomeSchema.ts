@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import incomeSourceSchema from "./incomeSourceSchema";
-import { IncomeDto } from "../../../../../in/income/http/dto/income";
+import { IncomeDto } from "../../../router/dto/income";
 
 const Types = Schema.Types;
 

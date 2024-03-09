@@ -1,5 +1,5 @@
 import type * as Http from "http";
-import logger from "../../../../../../logging/logger";
+import logger from "../logging/logger";
 import * as util from "util";
 import { type NextFunction, type Request, type Response } from "express";
 

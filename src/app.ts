@@ -1,14 +1,14 @@
 import express from "express";
 import helmet from "helmet";
 import environment from "./config/environment";
-import expressLogger from "./infrastructure/adapter/in/express/logging/expressLogger";
-import ApiRouter from "./infrastructure/adapter/in/express/routes/apiRouter";
-import { errorHandler } from "./infrastructure/adapter/in/express/middleware/error/errorHandler";
+import expressLogger from "./logging/expressLogger";
+import ApiRouter from "./router/apiRouter";
+import { errorHandler } from "./middleware/errorHandler";
 import * as OpenApiValidator from "express-openapi-validator";
 import * as path from "path";
-import BudgetRouter from "./infrastructure/adapter/in/budget/http/budgetRouter";
-import ExpenseRouter from "./infrastructure/adapter/in/expense/http/expenseRouter";
-import IncomeRouter from "./infrastructure/adapter/in/income/http/incomeRouter";
+import BudgetRouter from "./router/budgetRouter";
+import ExpenseRouter from "./router/expenseRouter";
+import IncomeRouter from "./router/incomeRouter";
 
 const app = express();
 
