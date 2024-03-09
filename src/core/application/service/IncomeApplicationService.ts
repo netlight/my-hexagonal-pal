@@ -1,6 +1,6 @@
 import { type Income, type IncomeId } from "../../domain/model/income/income";
-import { AppError } from "../../../infrastructure/adapter/in/express/middleware/errorHandler";
 import type IncomePersistencePort from "../port/incomePersistencePort";
+import IncomeNotFoundError from "../../domain/error/income/incomeNotFoundError";
 
 export interface IncomeApplicationService {
   getById: (id: IncomeId) => Promise<Income>;
@@ -11,10 +11,7 @@ export const getIncomeById: (ports: {
 }) => IncomeApplicationService["getById"] = (ports) => async (id) => {
   const income = await ports.getIncomeBy(id);
   if (income === undefined) {
-    throw new AppError(
-      "IncomeNotFound",
-      `Income with id ${id.value} does not exist`,
-    );
+    throw new IncomeNotFoundError(id);
   }
 
   return income;

@@ -18,7 +18,7 @@ const addIncomeSource: (
     const updatedIncome = await ports.persist(income);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return updatedIncome.getSourceBy(incomeId)!;
+    return updatedIncome.getSourceBy(incomeSource.id)!;
   };
 
 export default addIncomeSource;

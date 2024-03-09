@@ -7,12 +7,14 @@ import toExpressPath from "../../express/routes/toExpressPath";
 import apiPaths from "../../express/routes/apiPaths";
 import type { CreateBudgetUseCase } from "../../../../../core/application/usecase/createBudgetUseCase";
 import { type GetBudgetsUseCase } from "../../../../../core/application/usecase/getBudgetsUseCase";
+import { IncomeId } from "../../../../../core/domain/model/income/income";
 
 export const createBudget =
   (createBudget: CreateBudgetUseCase) =>
   async (req: Request, res: Response): Promise<void> => {
     const dto: NewBudgetDto = req.body;
-    const newBudget = NewBudgetDtoConverter.toDomain(dto);
+    const incomeId = req.params.incomeId;
+    const newBudget = NewBudgetDtoConverter.toDomain(incomeId, dto);
     const createdBudget = await createBudget(newBudget);
 
     res
@@ -21,9 +23,10 @@ export const createBudget =
   };
 
 export const getBudgets =
-  (getBudgets: GetBudgetsUseCase) =>
+  (getBudgetsBy: GetBudgetsUseCase) =>
   async (req: Request, res: Response): Promise<void> => {
-    const budgets = await getBudgets();
+    const incomeId = req.params.incomeId;
+    const budgets = await getBudgetsBy(new IncomeId(incomeId));
     res.status(StatusCodes.OK).json(budgets.map(BudgetDtoConverter.toDto));
   };
 

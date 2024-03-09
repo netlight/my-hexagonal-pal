@@ -8,9 +8,7 @@ export class Income {
     public readonly id: IncomeId,
     public name: string,
     public sources: IncomeSource[],
-  ) {
-    this.id = new IncomeId();
-  }
+  ) {}
 
   get totalIncome(): number {
     return this.sources.reduce((prev, curr) => prev + curr.amount, 0);

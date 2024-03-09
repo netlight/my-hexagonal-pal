@@ -4,6 +4,6 @@
  * @param openApiPath The in the OpenAPI spec defined path
  */
 const toExpressPath = (openApiPath: string): string =>
-  openApiPath.replaceAll(/({)(.*)(})/g, ":$2");
+  openApiPath.replaceAll(/({)([^{}]*)(})/g, ":$2");
 
 export default toExpressPath;

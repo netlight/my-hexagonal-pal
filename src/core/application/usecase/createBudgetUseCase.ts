@@ -1,6 +1,5 @@
 import { type Budget } from "../../domain/model/expense/budget";
-import { AppError } from "../../../infrastructure/adapter/in/express/middleware/errorHandler";
-import { isOverspending } from "../../domain/service/balanceDomainService";
+import { validateNoOverspending } from "../../domain/service/balanceDomainService";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
 import { type IncomeApplicationService } from "../service/IncomeApplicationService";
 
@@ -15,12 +14,7 @@ const createBudget: (
 ) => CreateBudgetUseCase = (ports, appServices) => async (budget) => {
   const income = await appServices.getIncomeBy(budget.incomeId);
   const existingBudgets = await ports.getAllBudgetsBy(budget.incomeId);
-  if (isOverspending(existingBudgets.concat(budget), income)) {
-    throw new AppError(
-      "BudgetOverspending",
-      "Sum of budget limits is bigger than income",
-    );
-  }
+  validateNoOverspending(existingBudgets.concat(budget), income);
 
   return await ports.persist(budget);
 };

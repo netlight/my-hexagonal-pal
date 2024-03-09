@@ -1,6 +1,7 @@
 import type IncomePersistencePort from "../../../../../../core/application/port/incomePersistencePort";
 import { IncomeModel } from "./models";
 import { IncomeEntityConverter } from "./entity/converters";
+import IncomeEntity from "./entity/IncomeEntity";
 
 export const findById: IncomePersistencePort["getById"] = async (id) => {
   const entity = await IncomeModel.findOne({ id: id.value });
@@ -14,17 +15,23 @@ export const findAll: IncomePersistencePort["getAll"] = async () => {
   return entities.map(IncomeEntityConverter.toDomain);
 };
 
-export const insert: IncomePersistencePort["persist"] = async (income) => {
+export const upsert: IncomePersistencePort["persist"] = async (income) => {
   const entity = IncomeEntityConverter.toEntity(income);
-  const model = new IncomeModel(entity);
-  const insertedEntity = await model.save();
-  return IncomeEntityConverter.toDomain(insertedEntity);
+  const upserted = <IncomeEntity>await IncomeModel.findOneAndUpdate(
+    { id: entity.id },
+    entity,
+    {
+      upsert: true,
+      returnDocument: "after",
+    },
+  );
+  return IncomeEntityConverter.toDomain(upserted);
 };
 
 const IncomeMongoPersistenceAdapter: IncomePersistencePort = {
   getById: findById,
   getAll: findAll,
-  persist: insert,
+  persist: upsert,
 };
 
 export default IncomeMongoPersistenceAdapter;

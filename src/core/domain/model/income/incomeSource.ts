@@ -1,5 +1,5 @@
-import { AppError } from "../../../../infrastructure/adapter/in/express/middleware/errorHandler";
 import { UniqueId } from "../uniqueId";
+import { NonPositiveIncomeSourceError } from "../../error/income/nonPositiveIncomeSourceError";
 
 export class IncomeSourceId extends UniqueId {}
 
@@ -10,10 +10,7 @@ export class IncomeSource {
     public readonly amount: number,
   ) {
     if (amount <= 0) {
-      throw new AppError(
-        "NonPositiveIncomeSource",
-        `Income source needs to be positive, but was ${amount}`,
-      );
+      throw new NonPositiveIncomeSourceError(amount);
     }
   }
 }

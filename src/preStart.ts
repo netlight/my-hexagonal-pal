@@ -9,6 +9,8 @@ import dotenv from "dotenv";
 import { parse } from "ts-command-line-args";
 import path from "path";
 import * as process from "process";
+import { useIdGenerator } from "./core/domain/model/uniqueId";
+import UUIDGenerator from "./infrastructure/lib/UUIDGenerator";
 
 // **** Types **** //
 
@@ -37,3 +39,6 @@ const dotenvConfig = dotenv.config({
 if (dotenvConfig.error != null) {
   throw dotenvConfig.error;
 }
+
+// Remaining configurations
+useIdGenerator(UUIDGenerator);
