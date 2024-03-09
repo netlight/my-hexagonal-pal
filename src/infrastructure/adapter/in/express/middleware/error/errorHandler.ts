@@ -2,7 +2,6 @@ import type * as Http from "http";
 import logger from "../../../../../../logging/logger";
 import * as util from "util";
 import { type NextFunction, type Request, type Response } from "express";
-import mapDomainErrors from "./domainErrorMapper";
 
 // This whole handling logic is copied from https://github.com/practicajs/practica was and modified to fit our application
 
@@ -98,7 +97,6 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ): void => {
-  err = mapDomainErrors(err);
   if (typeof err === "object") {
     const error = err as AppError;
     if (error.isTrusted === undefined || error.isTrusted === null) {
