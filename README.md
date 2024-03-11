@@ -78,7 +78,6 @@ which we also used to create the initial setup of our app.**
 - [![Express.js][Expressjs]][Express-url]
 - [![Typescript][Typescript]][Typescript-url]
 - [![MongoDB][MongoDB]][Mongodb-url]
-- [![Jest][Jest]][Jest-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,9 +105,9 @@ Needed toolings and frameworks you should install before building the project:
   npm install yarn -g
   ```
 
-- Docker and Docker Compose (Rancher on Windows can be used)
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) (Rancher on Windows can be used)
 
-- GitHub CLI (optional but recommended)
+- GitHub CLI (optional)
 
   ```shell
   brew install gh
@@ -119,7 +118,7 @@ Needed toolings and frameworks you should install before building the project:
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/ungaralex/my-hexagonal-pal.git
+   git clone https://github.com/netlight/my-hexagonal-pal.git
    ```
 
 2. Install NPM packages
@@ -135,7 +134,7 @@ To run/debug the service locally in dev mode, only the following is needed:
 1. Start the `mongo` service of the `docker-compose` file
 
    ```shell
-    docker-compose up -d mongo
+    docker-compose up -d
    ```
 
 2. Start the `my-finance-pal` service.
@@ -176,5 +175,3 @@ To run/debug the service locally in dev mode, only the following is needed:
 [Typescript-url]: https://www.typescriptlang.org/
 [MongoDB]: https://img.shields.io/badge/MongoDB-purple?style=for-the-badge&logo=mongodb&logoColor=green
 [Mongodb-url]: https://www.mongodb.com/
-[Jest]: https://img.shields.io/badge/Jest-orange?style=for-the-badge&logo=jest&logoColor=white
-[Jest-url]: https://jestjs.io/
