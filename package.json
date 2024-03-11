@@ -12,7 +12,7 @@
     "compile": "tsc",
     "build": "run-s clean generate-api-types compile copy-resources",
     "lint": "eslint --ext .ts src/",
-    "dev": "nodemon src/infrastructure/adapter/in/express/server.ts"
+    "dev": "nodemon src/server.ts"
   },
   "dependencies": {
     "@types/cors": "^2.8.17",
