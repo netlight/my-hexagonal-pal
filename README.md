@@ -6,9 +6,6 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![LinkedIn][linkedin-shield-alex]][linkedin-url-alex]
-[![LinkedIn][linkedin-shield-saadi]][linkedin-url-saadi]
-[![LinkedIn][linkedin-shield-arda]][linkedin-url-arda]
 
 <!-- PROJECT LOGO -->
 <br />
