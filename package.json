@@ -15,8 +15,10 @@
     "dev": "nodemon src/server.ts"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "@types/supertest": "^6.0.2",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "currency.js": "^2.0.4",
     "dotenv": "^16.0.3",
     "envalid": "^8.0.0",

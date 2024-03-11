@@ -32,16 +32,16 @@ export const getBudgets =
 
 const BudgetRouter = (
   createUseCase: CreateBudgetUseCase,
-  getAllUseCase: GetBudgetsUseCase,
+  getAllUseCase: GetBudgetsUseCase
 ): Router => {
   const router = Router();
   router.post(
-    toExpressPath(apiPaths.createBudget),
-    asyncHandler(createBudget(createUseCase)),
+    toExpressPath(apiPaths.createBudget as string),
+    asyncHandler(createBudget(createUseCase))
   );
   router.get(
-    toExpressPath(apiPaths.getBudgets),
-    asyncHandler(getBudgets(getAllUseCase)),
+    toExpressPath(apiPaths.getBudgets as string),
+    asyncHandler(getBudgets(getAllUseCase))
   );
 
   return router;

@@ -26,6 +26,7 @@ import IncomeRouter from "./infrastructure/adapter/in/income/http/incomeRouter";
 import getIncomesUseCase from "./core/application/usecase/getIncomesUseCase";
 import createIncomeUseCase from "./core/application/usecase/createIncomeUseCase";
 import addIncomeSourceUseCase from "./core/application/usecase/addIncomeSourceUseCase";
+import cors from "cors";
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use(expressLogger);
 app.use(express.json());
 // allow parsing of URL encoded payloads
 app.use(express.urlencoded({ extended: true }));
+// enable cors
+app.use(cors());
 
 // add some additional security on PROD by setting some important HTTP headers automatically
 if (environment.isProd) {
@@ -51,7 +54,7 @@ app.use(
     validateRequests: true,
     // also validate our responses to the clients
     // validateResponses: true,
-  }),
+  })
 );
 
 // Instantiate dependencies and pass them to the respective components needed for our use cases
@@ -76,25 +79,25 @@ const budgetRouter = BudgetRouter(
     },
     {
       getIncomeBy: incomeAppService.getById,
-    },
+    }
   ),
   getBudgetsUseCase({
     getAllBudgetsBy: BudgetMongoPersistenceAdapter.getAllByIncomeId,
-  }),
+  })
 );
 const expenseRouter = ExpenseRouter(
   trackExpenseUseCase(
     { persist: BudgetMongoPersistenceAdapter.persist },
-    { getBudgetBy: budgetAppService.getById },
-  ),
+    { getBudgetBy: budgetAppService.getById }
+  )
 );
 const incomeRouter = IncomeRouter(
   getIncomesUseCase({ getAllIncomes: IncomeMongoPersistenceAdapter.getAll }),
   createIncomeUseCase({ persist: IncomeMongoPersistenceAdapter.persist }),
   addIncomeSourceUseCase(
     { persist: IncomeMongoPersistenceAdapter.persist },
-    { getIncomeBy: incomeAppService.getById },
-  ),
+    { getIncomeBy: incomeAppService.getById }
+  )
 );
 
 const apiRouter = ApiRouter(budgetRouter, expenseRouter, incomeRouter);
