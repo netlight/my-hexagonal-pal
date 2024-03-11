@@ -1,6 +1,6 @@
 import { type Budget } from "../../domain/model/expense/budget";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
-import { IncomeId } from "../../domain/model/income/income";
+import { type IncomeId } from "../../domain/model/income/income";
 
 export type GetBudgetsUseCase = (incomeId: IncomeId) => Promise<Budget[]>;
 

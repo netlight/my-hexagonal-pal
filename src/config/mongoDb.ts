@@ -20,7 +20,7 @@ if (environment.LOG_LEVEL === "debug") {
     };
     logger.debug(
       `\x1B[0;36mMongoose:\x1B[0m: ${collectionName}.${methodName}` +
-        `(${methodArgs.map(msgMapper).join(", ")})`
+        `(${methodArgs.map(msgMapper).join(", ")})`,
     );
   });
 }

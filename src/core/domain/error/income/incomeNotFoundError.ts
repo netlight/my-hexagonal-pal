@@ -1,4 +1,4 @@
-import { IncomeId } from "../../model/income/income";
+import { type IncomeId } from "../../model/income/income";
 import { Error } from "mongoose";
 
 class IncomeNotFoundError extends Error {

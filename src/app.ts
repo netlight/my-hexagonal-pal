@@ -10,12 +10,12 @@ import createBudgetUseCase from "./core/application/usecase/createBudgetUseCase"
 import BudgetMongoPersistenceAdapter from "./infrastructure/adapter/out/budget/persistence/mongo/budgetMongoPersistenceAdapter";
 import {
   getIncomeById,
-  IncomeApplicationService,
+  type IncomeApplicationService,
 } from "./core/application/service/IncomeApplicationService";
 import IncomeMongoPersistenceAdapter from "./infrastructure/adapter/out/income/persistence/mongo/incomeMongoPersistenceAdapter";
 import getBudgetsUseCase from "./core/application/usecase/getBudgetsUseCase";
 import {
-  BudgetApplicationService,
+  type BudgetApplicationService,
   getBudgetByExpenseId,
   getBudgetById,
 } from "./core/application/service/budgetApplicationService";
@@ -54,7 +54,7 @@ app.use(
     validateRequests: true,
     // also validate our responses to the clients
     // validateResponses: true,
-  })
+  }),
 );
 
 // Instantiate dependencies and pass them to the respective components needed for our use cases
@@ -79,25 +79,25 @@ const budgetRouter = BudgetRouter(
     },
     {
       getIncomeBy: incomeAppService.getById,
-    }
+    },
   ),
   getBudgetsUseCase({
     getAllBudgetsBy: BudgetMongoPersistenceAdapter.getAllByIncomeId,
-  })
+  }),
 );
 const expenseRouter = ExpenseRouter(
   trackExpenseUseCase(
     { persist: BudgetMongoPersistenceAdapter.persist },
-    { getBudgetBy: budgetAppService.getById }
-  )
+    { getBudgetBy: budgetAppService.getById },
+  ),
 );
 const incomeRouter = IncomeRouter(
   getIncomesUseCase({ getAllIncomes: IncomeMongoPersistenceAdapter.getAll }),
   createIncomeUseCase({ persist: IncomeMongoPersistenceAdapter.persist }),
   addIncomeSourceUseCase(
     { persist: IncomeMongoPersistenceAdapter.persist },
-    { getIncomeBy: incomeAppService.getById }
-  )
+    { getIncomeBy: incomeAppService.getById },
+  ),
 );
 
 const apiRouter = ApiRouter(budgetRouter, expenseRouter, incomeRouter);

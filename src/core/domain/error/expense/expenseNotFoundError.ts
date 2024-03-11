@@ -1,4 +1,4 @@
-import { ExpenseId } from "../../model/expense/expense";
+import { type ExpenseId } from "../../model/expense/expense";
 
 class ExpenseNotFoundError extends Error {
   constructor(public readonly expenseId: ExpenseId) {
