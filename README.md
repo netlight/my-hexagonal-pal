@@ -15,12 +15,12 @@
   <p align="center">
     Example Typescript Node.js webserivce showcasing best practices in software development
     <br />
-    <a href="https://github.com/ungaralex/my-hexagonal-pal"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/netlight/my-hexagonal-pal"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/ungaralex/my-hexagonal-pal/issues">Report Bug</a>
+    <a href="https://github.com/netlight/my-hexagonal-pal/issues">Report Bug</a>
     ·
-    <a href="https://github.com/ungaralex/my-hexagonal-pal/issues">Request Feature</a>
+    <a href="https://github.com/netlight/my-hexagonal-pal/issues">Request Feature</a>
   </p>
 </div>
 
@@ -161,9 +161,9 @@ To run/debug the service locally in dev mode, only the following is needed:
 [contributors-url]: https://github.com/netlight/my-hexagonal-pal/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/netlight/my-hexagonal-pal.svg?style=for-the-badge
 [forks-url]: https://github.com/netlight/my-hexagonal-pal/network/members
-[stars-shield]: https://img.shields.io/github/stars/ungaralex/my-hexagonal-pal.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/netlight/my-hexagonal-pal.svg?style=for-the-badge
 [stars-url]: https://github.com/netlight/my-hexagonal-pal/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ungaralex/my-hexagonal-pal.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/netlight/my-hexagonal-pal.svg?style=for-the-badge
 [issues-url]: https://github.com/netlight/my-hexagonal-pal/issues
 [linkedin-shield-alex]: https://img.shields.io/badge/-Alexander%20Ungar-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url-alex]: https://www.linkedin.com/in/alexander-ungar
