@@ -36,11 +36,11 @@ const BudgetRouter = (
 ): Router => {
   const router = Router();
   router.post(
-    toExpressPath(apiPaths.createBudget as string),
+    toExpressPath(apiPaths.createBudget),
     asyncHandler(createBudget(createUseCase)),
   );
   router.get(
-    toExpressPath(apiPaths.getBudgets as string),
+    toExpressPath(apiPaths.getBudgets),
     asyncHandler(getBudgets(getAllUseCase)),
   );
 
