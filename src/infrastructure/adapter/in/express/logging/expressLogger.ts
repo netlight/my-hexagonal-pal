@@ -1,6 +1,6 @@
 import expressWinston from "express-winston";
 import winston from "winston";
-import environment from "../../../../../config/environment";
+import environment from "../../../../config/environment";
 
 const expressLogger = expressWinston.logger({
   level: environment.LOG_LEVEL,

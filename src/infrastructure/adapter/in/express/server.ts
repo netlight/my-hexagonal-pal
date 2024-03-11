@@ -1,10 +1,10 @@
 import "./preStart"; // always have this at the top of this file in order to execute these scripts first
 import * as http from "http";
 import app from "./app";
-import { listenToErrorEvents } from "./infrastructure/adapter/in/express/middleware/error/errorHandler";
-import logger from "./logging/logger";
-import environment from "./config/environment";
-import mongoDb from "./config/mongoDb";
+import { listenToErrorEvents } from "./middleware/error/errorHandler";
+import logger from "../../../../logging/logger";
+import environment from "../../../config/environment";
+import mongoDb from "../../../config/mongoDb";
 
 void (async () => {
   await mongoDb.connect();

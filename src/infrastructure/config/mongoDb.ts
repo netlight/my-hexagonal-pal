@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import environment from "./environment";
-import logger from "../logging/logger";
+import logger from "../../logging/logger";
 import * as util from "util";
 
 export const connect = async (): Promise<void> => {

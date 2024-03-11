@@ -9,8 +9,8 @@ import dotenv from "dotenv";
 import { parse } from "ts-command-line-args";
 import path from "path";
 import * as process from "process";
-import { useIdGenerator } from "./core/domain/model/uniqueId";
-import UUIDGenerator from "./infrastructure/lib/UUIDGenerator";
+import { useIdGenerator } from "../../../../core/domain/model/uniqueId";
+import UUIDGenerator from "../../../lib/UUIDGenerator";
 
 // **** Types **** //
 
@@ -33,8 +33,10 @@ const args = parse<Args>(
 );
 
 // Set the env file
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const appRootPath: string = require("app-root-path").path;
 const dotenvConfig = dotenv.config({
-  path: path.join(__dirname, "..", "env", `${args.env}.env`),
+  path: path.join(appRootPath, "env", `${args.env}.env`),
 });
 if (dotenvConfig.error != null) {
   throw dotenvConfig.error;

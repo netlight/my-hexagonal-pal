@@ -12,11 +12,12 @@
     "compile": "tsc",
     "build": "run-s clean generate-api-types compile copy-resources",
     "lint": "eslint --ext .ts src/",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/infrastructure/adapter/in/express/server.ts"
   },
   "dependencies": {
     "@types/cors": "^2.8.17",
     "@types/supertest": "^6.0.2",
+    "app-root-path": "^3.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "currency.js": "^2.0.4",

@@ -1,5 +1,5 @@
 import winston from "winston";
-import environment from "../config/environment";
+import environment from "../infrastructure/config/environment";
 
 const logger = winston.createLogger({
   level: environment.LOG_LEVEL,

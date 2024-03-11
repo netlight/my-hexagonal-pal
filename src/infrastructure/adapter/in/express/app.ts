@@ -1,31 +1,31 @@
 import express from "express";
 import helmet from "helmet";
-import environment from "./config/environment";
-import expressLogger from "./infrastructure/adapter/in/express/logging/expressLogger";
-import ApiRouter from "./infrastructure/adapter/in/express/routes/apiRouter";
-import { errorHandler } from "./infrastructure/adapter/in/express/middleware/error/errorHandler";
+import environment from "../../../config/environment";
+import expressLogger from "./logging/expressLogger";
+import ApiRouter from "./routes/apiRouter";
+import { errorHandler } from "./middleware/error/errorHandler";
 import * as OpenApiValidator from "express-openapi-validator";
 import * as path from "path";
-import createBudgetUseCase from "./core/application/usecase/createBudgetUseCase";
-import BudgetMongoPersistenceAdapter from "./infrastructure/adapter/out/budget/persistence/mongo/budgetMongoPersistenceAdapter";
+import createBudgetUseCase from "../../../../core/application/usecase/createBudgetUseCase";
+import BudgetMongoPersistenceAdapter from "../../out/budget/persistence/mongo/budgetMongoPersistenceAdapter";
 import {
   getIncomeById,
   type IncomeApplicationService,
-} from "./core/application/service/IncomeApplicationService";
-import IncomeMongoPersistenceAdapter from "./infrastructure/adapter/out/income/persistence/mongo/incomeMongoPersistenceAdapter";
-import getBudgetsUseCase from "./core/application/usecase/getBudgetsUseCase";
+} from "../../../../core/application/service/IncomeApplicationService";
+import IncomeMongoPersistenceAdapter from "../../out/income/persistence/mongo/incomeMongoPersistenceAdapter";
+import getBudgetsUseCase from "../../../../core/application/usecase/getBudgetsUseCase";
 import {
   type BudgetApplicationService,
   getBudgetByExpenseId,
   getBudgetById,
-} from "./core/application/service/budgetApplicationService";
-import BudgetRouter from "./infrastructure/adapter/in/budget/http/budgetRouter";
-import ExpenseRouter from "./infrastructure/adapter/in/expense/http/expenseRouter";
-import trackExpenseUseCase from "./core/application/usecase/trackExpenseUseCase";
-import IncomeRouter from "./infrastructure/adapter/in/income/http/incomeRouter";
-import getIncomesUseCase from "./core/application/usecase/getIncomesUseCase";
-import createIncomeUseCase from "./core/application/usecase/createIncomeUseCase";
-import addIncomeSourceUseCase from "./core/application/usecase/addIncomeSourceUseCase";
+} from "../../../../core/application/service/budgetApplicationService";
+import BudgetRouter from "../budget/http/budgetRouter";
+import ExpenseRouter from "../expense/http/expenseRouter";
+import trackExpenseUseCase from "../../../../core/application/usecase/trackExpenseUseCase";
+import IncomeRouter from "../income/http/incomeRouter";
+import getIncomesUseCase from "../../../../core/application/usecase/getIncomesUseCase";
+import createIncomeUseCase from "../../../../core/application/usecase/createIncomeUseCase";
+import addIncomeSourceUseCase from "../../../../core/application/usecase/addIncomeSourceUseCase";
 import cors from "cors";
 
 const app = express();
