@@ -1,11 +1,11 @@
 import type BudgetPersistencePort from "../../../../../../core/application/port/budgetPersistencePort";
 import { BudgetEntityConverter } from "./entity/converters";
 import { BudgetModel } from "./models";
-import BudgetEntity from "./entity/budgetEntity";
+import type BudgetEntity from "./entity/budgetEntity";
 
 export const upsert: BudgetPersistencePort["persist"] = async (summary) => {
   const entity = BudgetEntityConverter.toEntity(summary);
-  const upserted = <BudgetEntity>await BudgetModel.findOneAndUpdate(
+  const upserted = await BudgetModel.findOneAndUpdate(
     { id: entity.id },
     entity,
     {

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import IncomeSourceEntity from "../entity/IncomeSourceEntity";
+import type IncomeSourceEntity from "../entity/IncomeSourceEntity";
 
 const Types = Schema.Types;
 

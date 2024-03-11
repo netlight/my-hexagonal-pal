@@ -19,7 +19,7 @@ export abstract class UniqueId {
   public readonly value: string;
 
   constructor(value: string = generator.generate()) {
-    let problems = generator.validate(value);
+    const problems = generator.validate(value);
     if (problems) {
       throw new InvalidIdError(value, problems);
     }

@@ -1,6 +1,6 @@
 import { Error } from "mongoose";
-import { Budget } from "../../model/expense/budget";
-import { Expense } from "../../model/expense/expense";
+import { type Budget } from "../../model/expense/budget";
+import { type Expense } from "../../model/expense/expense";
 
 class ExpenseDateOutOfBoundsError extends Error {
   constructor(
