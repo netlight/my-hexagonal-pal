@@ -32,8 +32,5 @@ Thumbs.db
 # Ignore built ts files
 dist
 
-# Ignore package manager lock file
-pnpm-lock.yaml
-
 # Generated files
 generated
