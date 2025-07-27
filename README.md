@@ -99,11 +99,7 @@ Needed toolings and frameworks you should install before building the project:
   npm install npm@latest -g
   ```
 
-- Yarn
-
-  ```shell
-  npm install yarn -g
-  ```
+- pnpm &#8594; follow [the official installation guide](https://pnpm.io/installation)
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) (Rancher on Windows can be used)
 
@@ -124,7 +120,7 @@ Needed toolings and frameworks you should install before building the project:
 2. Install NPM packages
 
    ```sh
-   yarn install
+   pnpm install
    ```
 
 ### Run Locally
@@ -140,7 +136,7 @@ To run/debug the service locally in dev mode, only the following is needed:
 2. Start the `my-finance-pal` service.
 
    ```shell
-   yarn dev
+   pnpm dev
    ```
 
    The service now runs on port 3000 and listens to requests

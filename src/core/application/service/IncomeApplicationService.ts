@@ -1,4 +1,4 @@
-import { type Income, type IncomeId } from "../../domain/model/income/income";
+import type { Income, IncomeId } from "../../domain/model/income/income";
 import type IncomePersistencePort from "../port/incomePersistencePort";
 import IncomeNotFoundError from "../../domain/error/income/incomeNotFoundError";
 
