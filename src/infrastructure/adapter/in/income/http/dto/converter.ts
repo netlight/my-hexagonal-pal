@@ -1,8 +1,8 @@
-import {
-  type IncomeDto,
-  type IncomeSourceDto,
-  type NewIncomeDto,
-  type NewIncomeSourceDto,
+import type {
+  IncomeDto,
+  IncomeSourceDto,
+  NewIncomeDto,
+  NewIncomeSourceDto,
 } from "./income";
 import {
   Income,

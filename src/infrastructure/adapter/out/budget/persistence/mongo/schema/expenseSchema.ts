@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import type ExpenseEntity from "../entity/expenseEntity";
 
-const Types = Schema.Types;
+const {Types} = Schema;
 
 const expenseSchema = new mongoose.Schema<ExpenseEntity>(
   {

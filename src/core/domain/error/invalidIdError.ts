@@ -1,4 +1,4 @@
-import { type UniqueIdValidationError } from "../model/uniqueId";
+import type { UniqueIdValidationError } from "../model/uniqueId";
 
 class InvalidIdError extends Error {
   constructor(

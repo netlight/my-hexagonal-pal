@@ -1,7 +1,6 @@
 import type BudgetPersistencePort from "../../../../../../core/application/port/budgetPersistencePort";
 import { BudgetEntityConverter } from "./entity/converters";
 import { BudgetModel } from "./models";
-import type BudgetEntity from "./entity/budgetEntity";
 
 export const upsert: BudgetPersistencePort["persist"] = async (summary) => {
   const entity = BudgetEntityConverter.toEntity(summary);
@@ -21,6 +20,7 @@ export const findById: BudgetPersistencePort["getById"] = async (id) => {
   if (entity !== null) {
     return BudgetEntityConverter.toDomain(entity);
   }
+  return undefined;
 };
 
 export const findByExpenseId: BudgetPersistencePort["getByExpenseId"] = async (
@@ -30,6 +30,7 @@ export const findByExpenseId: BudgetPersistencePort["getByExpenseId"] = async (
   if (entity !== null) {
     return BudgetEntityConverter.toDomain(entity);
   }
+  return undefined;
 };
 
 export const findAllByIncomeId: BudgetPersistencePort["getAllByIncomeId"] =

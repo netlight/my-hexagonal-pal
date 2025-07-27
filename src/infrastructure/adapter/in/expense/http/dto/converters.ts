@@ -1,4 +1,4 @@
-import { type ExpenseDto, type NewExpenseDto } from "./expense";
+import type { ExpenseDto, NewExpenseDto } from "./expense";
 import {
   Expense,
   ExpenseId,

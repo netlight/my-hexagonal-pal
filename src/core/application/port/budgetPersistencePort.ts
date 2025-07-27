@@ -1,6 +1,6 @@
 import type { Budget, BudgetId } from "../../domain/model/expense/budget";
-import { type ExpenseId } from "../../domain/model/expense/expense";
-import { type IncomeId } from "../../domain/model/income/income";
+import type { ExpenseId } from "../../domain/model/expense/expense";
+import type { IncomeId } from "../../domain/model/income/income";
 
 interface BudgetPersistencePort {
   getById: (id: BudgetId) => Promise<Budget | undefined>;

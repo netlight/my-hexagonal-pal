@@ -1,5 +1,5 @@
 import type { Budget, BudgetId } from "../../domain/model/expense/budget";
-import { type ExpenseId } from "../../domain/model/expense/expense";
+import type { ExpenseId } from "../../domain/model/expense/expense";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
 import BudgetNotFoundError from "../../domain/error/budget/budgetNotFoundError";
 import ExpenseNotFoundError from "../../domain/error/expense/expenseNotFoundError";

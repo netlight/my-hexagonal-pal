@@ -1,13 +1,13 @@
 import type IncomePersistencePort from "../../../../../../core/application/port/incomePersistencePort";
 import { IncomeModel } from "./models";
 import { IncomeEntityConverter } from "./entity/converters";
-import type IncomeEntity from "./entity/IncomeEntity";
 
 export const findById: IncomePersistencePort["getById"] = async (id) => {
   const entity = await IncomeModel.findOne({ id: id.value });
   if (entity !== null) {
     return IncomeEntityConverter.toDomain(entity);
   }
+  return undefined;
 };
 
 export const findAll: IncomePersistencePort["getAll"] = async () => {

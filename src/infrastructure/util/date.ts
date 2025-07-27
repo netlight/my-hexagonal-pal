@@ -3,9 +3,10 @@
  * @param isoString The date string to be parsed
  */
 export const toDate = (isoString?: string): Date | undefined => {
-  if (isoString !== null && isoString !== undefined) {
+  if (isoString !== undefined) {
     return new Date(isoString);
   }
+  return undefined;
 };
 
 /**
@@ -14,8 +15,9 @@ export const toDate = (isoString?: string): Date | undefined => {
  * @param date The date to be written in ISO date format
  */
 export const toIsoDate = (date?: Date): string | undefined => {
-  if (date !== null && date !== undefined) {
+  if (date !== undefined) {
     const isoDateTime = date.toISOString();
     return isoDateTime.substring(0, isoDateTime.indexOf("T"));
   }
+  return undefined;
 };

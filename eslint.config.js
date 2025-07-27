@@ -15,7 +15,29 @@ export default [
   {
     files: ["**/*.{js,mjs,cjs,ts,tsx}"],
     rules: {
-      // Adjust rules as needed for your project
+      "@typescript-eslint/no-non-null-assertion": "warn", // Only warn on non-null assertions
+      "@typescript-eslint/max-params": ["warn", { max: 4 }], // Warn on too many constructor/function parameters
+      "@typescript-eslint/no-magic-numbers": [
+        "warn",
+        {
+          ignore: [0], // Common numbers that are OK
+          ignoreArrayIndexes: true,
+          ignoreDefaultValues: true,
+          ignoreClassFieldInitialValues: true,
+          ignoreNumericLiteralTypes: true,
+          ignoreReadonlyClassProperties: true,
+          ignoreEnums: true,
+          ignoreTypeIndexes: true,
+        },
+      ],
+      "@typescript-eslint/no-unnecessary-condition": "warn",
+      "@typescript-eslint/no-unsafe-type-assertion": "warn",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
+      "@typescript-eslint/prefer-nullish-coalescing": "warn",
+      "logical-assignment-operators": "warn",
+
+      // Unsafe assignments are ok for this exercise
+      "@typescript-eslint/no-unsafe-assignment": "off",
 
       // Allow console.log in development
       "no-console": process.env.NODE_ENV === "production" ? "error" : "warn",

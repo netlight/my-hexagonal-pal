@@ -1,6 +1,6 @@
 import InvalidIdError from "../error/invalidIdError";
 
-let generator: UniqueIdGenerator;
+let generator: UniqueIdGenerator | undefined = undefined;
 
 export const useIdGenerator: (generator: UniqueIdGenerator) => void = (gen) => {
   generator = gen;
@@ -18,9 +18,13 @@ export interface UniqueIdGenerator {
 export abstract class UniqueId {
   public readonly value: string;
 
-  constructor(value: string = generator.generate()) {
+  constructor(value: string | undefined = undefined) {
+    if (generator === undefined) {
+      throw Error("ID generator not initialized!");
+    }
+    value ??= generator.generate();
     const problems = generator.validate(value);
-    if (problems) {
+    if (problems !== undefined) {
       throw new InvalidIdError(value, problems);
     }
     this.value = value;

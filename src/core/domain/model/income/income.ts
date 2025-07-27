@@ -1,5 +1,5 @@
 import { UniqueId } from "../uniqueId";
-import { type IncomeSource, type IncomeSourceId } from "./incomeSource";
+import type { IncomeSource, IncomeSourceId } from "./incomeSource";
 
 export class IncomeId extends UniqueId {}
 
