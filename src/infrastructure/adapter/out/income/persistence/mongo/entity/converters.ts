@@ -1,34 +1,34 @@
 import {
-  Income,
-  IncomeId,
-} from "../../../../../../../core/domain/model/income/income";
-import type IncomeEntity from "./IncomeEntity";
+  IncomeStream,
+  IncomeStreamId,
+} from "../../../../../../../core/domain/model/income/incomeStream";
+import type IncomeStreamEntity from "./IncomeStreamEntity";
 import {
-  IncomeSource,
-  IncomeSourceId,
-} from "../../../../../../../core/domain/model/income/incomeSource";
-import type IncomeSourceEntity from "./IncomeSourceEntity";
+  Earning,
+  EarningId,
+} from "../../../../../../../core/domain/model/income/earning";
+import type EarningEntity from "./EarningEntity";
 
 export const IncomeEntityConverter = {
-  toEntity: (domain: Income): IncomeEntity => ({
+  toEntity: (domain: IncomeStream): IncomeStreamEntity => ({
     id: domain.id.value,
     name: domain.name,
-    sources: domain.sources.map(IncomeSourceEntityConverter.toEntity),
+    earnings: domain.earnings.map(EarningEntityConverter.toEntity),
   }),
-  toDomain: (entity: IncomeEntity): Income =>
-    new Income(
-      new IncomeId(entity.id),
+  toDomain: (entity: IncomeStreamEntity): IncomeStream =>
+    new IncomeStream(
+      new IncomeStreamId(entity.id),
       entity.name,
-      entity.sources.map(IncomeSourceEntityConverter.toDomain),
+      entity.earnings.map(EarningEntityConverter.toDomain),
     ),
 };
 
-export const IncomeSourceEntityConverter = {
-  toEntity: (domain: IncomeSource): IncomeSourceEntity => ({
+export const EarningEntityConverter = {
+  toEntity: (domain: Earning): EarningEntity => ({
     id: domain.id.value,
     name: domain.name,
     amount: domain.amount,
   }),
-  toDomain: (entity: IncomeSourceEntity): IncomeSource =>
-    new IncomeSource(new IncomeSourceId(entity.id), entity.name, entity.amount),
+  toDomain: (entity: EarningEntity): Earning =>
+    new Earning(new EarningId(entity.id), entity.name, entity.amount),
 };

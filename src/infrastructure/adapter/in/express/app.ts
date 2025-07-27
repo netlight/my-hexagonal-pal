@@ -9,11 +9,11 @@ import * as path from "node:path";
 import createBudgetUseCase from "../../../../core/application/usecase/createBudgetUseCase";
 import BudgetMongoPersistenceAdapter from "../../out/budget/persistence/mongo/budgetMongoPersistenceAdapter";
 import {
-  getIncomeById,
-  type IncomeApplicationService,
-} from "../../../../core/application/service/IncomeApplicationService";
-import IncomeMongoPersistenceAdapter from "../../out/income/persistence/mongo/incomeMongoPersistenceAdapter";
-import getBudgetsUseCase from "../../../../core/application/usecase/getBudgetsUseCase";
+  getIncomeStreamById,
+  type IncomeStreamApplicationService,
+} from "../../../../core/application/service/IncomeStreamApplicationService";
+import IncomeStreamMongoPersistenceAdapter from "../../out/income/persistence/mongo/incomeMongoPersistenceAdapter";
+import findBudgetUseCase from "../../../../core/application/usecase/findBudgetUseCase";
 import {
   type BudgetApplicationService,
   getBudgetByExpenseId,
@@ -22,12 +22,13 @@ import {
 import BudgetRouter from "../budget/http/budgetRouter";
 import ExpenseRouter from "../expense/http/expenseRouter";
 import trackExpenseUseCase from "../../../../core/application/usecase/trackExpenseUseCase";
-import IncomeRouter from "../income/http/incomeRouter";
-import getIncomesUseCase from "../../../../core/application/usecase/getIncomesUseCase";
-import createIncomeUseCase from "../../../../core/application/usecase/createIncomeUseCase";
-import addIncomeSourceUseCase from "../../../../core/application/usecase/addIncomeSourceUseCase";
+import IncomeStreamRouter from "../income/http/incomeRouter";
+import getAllIncomeStreams from "../../../../core/application/usecase/getAllIncomeStreamsUseCase";
+import createIncomeUseCase from "../../../../core/application/usecase/openNewIncomeStreamUseCase";
+import registerEarningUseCase from "../../../../core/application/usecase/registerEarningUseCase";
 import cors from "cors";
 import * as process from "node:process";
+import getAllBudgetsUseCase from "../../../../core/application/usecase/getAllBudgetsUseCase";
 
 const app = express();
 
@@ -60,48 +61,49 @@ app.use(
 
 // Instantiate dependencies and pass them to the respective components needed for our use cases
 const budgetAppService: BudgetApplicationService = {
-  getById: getBudgetById({
-    getBudgetBy: BudgetMongoPersistenceAdapter.getById,
+  findBy: getBudgetById({
+    getBudgetBy: BudgetMongoPersistenceAdapter.findBy,
   }),
-  getByExpenseId: getBudgetByExpenseId({
-    getBudgetBy: BudgetMongoPersistenceAdapter.getByExpenseId,
+  findForExpenseId: getBudgetByExpenseId({
+    getBudgetBy: BudgetMongoPersistenceAdapter.findForExpenseId,
   }),
 };
-const incomeAppService: IncomeApplicationService = {
-  getById: getIncomeById({
-    getIncomeBy: IncomeMongoPersistenceAdapter.getById,
+const incomeStreamAppService: IncomeStreamApplicationService = {
+  findBy: getIncomeStreamById({
+    findBy: IncomeStreamMongoPersistenceAdapter.findBy,
   }),
 };
 const budgetRouter = BudgetRouter(
-  createBudgetUseCase(
-    {
-      getAllBudgetsBy: BudgetMongoPersistenceAdapter.getAllByIncomeId,
-      persist: BudgetMongoPersistenceAdapter.persist,
-    },
-    {
-      getIncomeBy: incomeAppService.getById,
-    },
-  ),
-  getBudgetsUseCase({
-    getAllBudgetsBy: BudgetMongoPersistenceAdapter.getAllByIncomeId,
+  createBudgetUseCase({
+    getAllBudgets: BudgetMongoPersistenceAdapter.findAll,
+    getAllIncomeStreams: IncomeStreamMongoPersistenceAdapter.findAll,
+    persist: BudgetMongoPersistenceAdapter.persist,
+  }),
+  getAllBudgetsUseCase({
+    findAllBudgets: BudgetMongoPersistenceAdapter.findAll,
+  }),
+  findBudgetUseCase({
+    findBy: BudgetMongoPersistenceAdapter.findBy,
   }),
 );
 const expenseRouter = ExpenseRouter(
   trackExpenseUseCase(
     { persist: BudgetMongoPersistenceAdapter.persist },
-    { getBudgetBy: budgetAppService.getById },
+    { getBudgetBy: budgetAppService.findBy },
   ),
 );
-const incomeRouter = IncomeRouter(
-  getIncomesUseCase({ getAllIncomes: IncomeMongoPersistenceAdapter.getAll }),
-  createIncomeUseCase({ persist: IncomeMongoPersistenceAdapter.persist }),
-  addIncomeSourceUseCase(
-    { persist: IncomeMongoPersistenceAdapter.persist },
-    { getIncomeBy: incomeAppService.getById },
+const incomeStreamRouter = IncomeStreamRouter(
+  getAllIncomeStreams({
+    findAllIncomeStreams: IncomeStreamMongoPersistenceAdapter.findAll,
+  }),
+  createIncomeUseCase({ persist: IncomeStreamMongoPersistenceAdapter.persist }),
+  registerEarningUseCase(
+    { persist: IncomeStreamMongoPersistenceAdapter.persist },
+    { getIncomeStreamBy: incomeStreamAppService.findBy },
   ),
 );
 
-const apiRouter = ApiRouter(budgetRouter, expenseRouter, incomeRouter);
+const apiRouter = ApiRouter(budgetRouter, expenseRouter, incomeStreamRouter);
 app.use(apiRouter);
 
 // IMPORTANT! Always add an error handler to avoid unexpected crashes of the app!

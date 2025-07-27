@@ -6,14 +6,15 @@ import { BudgetDtoConverter, NewBudgetDtoConverter } from "./dto/converters";
 import toExpressPath from "../../express/routes/toExpressPath";
 import apiPaths from "../../express/routes/apiPaths";
 import type { CreateBudgetUseCase } from "../../../../../core/application/usecase/createBudgetUseCase";
-import type { GetBudgetsUseCase } from "../../../../../core/application/usecase/getBudgetsUseCase";
-import { IncomeId } from "../../../../../core/domain/model/income/income";
+import type { FindBudgetUseCase } from "../../../../../core/application/usecase/findBudgetUseCase";
+import type { GetAllBudgetsUseCase } from "../../../../../core/application/usecase/getAllBudgetsUseCase";
+import { BudgetId } from "../../../../../core/domain/model/expense/budget";
 
 export const createBudget =
   (createBudget: CreateBudgetUseCase) =>
   async (req: Request, res: Response): Promise<void> => {
     const dto: NewBudgetDto = req.body;
-    const newBudget = NewBudgetDtoConverter.toDomain(req.params.incomeId, dto);
+    const newBudget = NewBudgetDtoConverter.toDomain(dto);
     const createdBudget = await createBudget(newBudget);
 
     res
@@ -21,16 +22,29 @@ export const createBudget =
       .json(BudgetDtoConverter.toDto(createdBudget));
   };
 
-export const getBudgets =
-  (getBudgetsBy: GetBudgetsUseCase) =>
+export const findOneBudget =
+  (findBudgetUseCase: FindBudgetUseCase) =>
   async (req: Request, res: Response): Promise<void> => {
-    const budgets = await getBudgetsBy(new IncomeId(req.params.incomeId));
+    const budget = await findBudgetUseCase(new BudgetId(req.params.budgetId));
+    if (budget === undefined) {
+      res.status(StatusCodes.NOT_FOUND);
+    } else {
+      res.status(StatusCodes.OK).json(BudgetDtoConverter.toDto(budget));
+    }
+  };
+
+export const getAllBudgets =
+  (getAllBudgetsUseCase: GetAllBudgetsUseCase) =>
+  async (_req: Request, res: Response) => {
+    const budgets = await getAllBudgetsUseCase();
+
     res.status(StatusCodes.OK).json(budgets.map(BudgetDtoConverter.toDto));
   };
 
 const BudgetRouter = (
   createUseCase: CreateBudgetUseCase,
-  getAllUseCase: GetBudgetsUseCase,
+  getAllUseCase: GetAllBudgetsUseCase,
+  findOneUseCase: FindBudgetUseCase,
 ): Router => {
   const router = Router();
   router.post(
@@ -39,7 +53,11 @@ const BudgetRouter = (
   );
   router.get(
     toExpressPath(apiPaths.getBudgets),
-    asyncHandler(getBudgets(getAllUseCase)),
+    asyncHandler(getAllBudgets(getAllUseCase)),
+  );
+  router.get(
+    toExpressPath(apiPaths.findBudgetById),
+    asyncHandler(findOneBudget(findOneUseCase)),
   );
 
   return router;

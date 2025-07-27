@@ -4,7 +4,6 @@ import {
   BudgetId,
 } from "../../../../../../../core/domain/model/expense/budget";
 import Limit from "../../../../../../../core/domain/model/expense/limit";
-import { IncomeId } from "../../../../../../../core/domain/model/income/income";
 import {
   Expense,
   ExpenseId,
@@ -14,7 +13,6 @@ import type ExpenseEntity from "./expenseEntity";
 export const BudgetEntityConverter = {
   toEntity: (domain: Budget): BudgetEntity => ({
     id: domain.id.value,
-    incomeId: domain.incomeId.value,
     name: domain.name,
     limit: domain.limit.amount,
     expenses: domain.expenses.map(ExpenseEntityConverter.toEntity),
@@ -24,7 +22,6 @@ export const BudgetEntityConverter = {
   toDomain: (entity: BudgetEntity): Budget =>
     new Budget(
       new BudgetId(entity.id),
-      new IncomeId(entity.incomeId),
       entity.name,
       new Limit(entity.limit),
       entity.expenses.map(ExpenseEntityConverter.toDomain),

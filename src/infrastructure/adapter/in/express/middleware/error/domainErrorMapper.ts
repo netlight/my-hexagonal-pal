@@ -5,7 +5,7 @@ import IncomeNotFoundError from "../../../../../../core/domain/error/income/inco
 import BudgetLimitReachedError from "../../../../../../core/domain/error/budget/budgetLimitReachedError";
 import BudgetOverspendingError from "../../../../../../core/domain/error/budget/budgetOverspendingError";
 import ExpenseDateOutOfBoundsError from "../../../../../../core/domain/error/expense/expenseDateOutOfBoundsError";
-import { NonPositiveIncomeSourceError } from "../../../../../../core/domain/error/income/nonPositiveIncomeSourceError";
+import { NonPositiveEarningError } from "../../../../../../core/domain/error/income/nonPositiveEarningError";
 import NegativeLimitError from "../../../../../../core/domain/error/negativeLimitError";
 import InvalidIdError from "../../../../../../core/domain/error/invalidIdError";
 
@@ -16,7 +16,7 @@ const httpStatusMappings = [
   { error: BudgetLimitReachedError, status: 409 },
   { error: BudgetOverspendingError, status: 409 },
   { error: ExpenseDateOutOfBoundsError, status: 409 },
-  { error: NonPositiveIncomeSourceError, status: 400 },
+  { error: NonPositiveEarningError, status: 400 },
   { error: NegativeLimitError, status: 400 },
   { error: InvalidIdError, status: 400 },
 ];

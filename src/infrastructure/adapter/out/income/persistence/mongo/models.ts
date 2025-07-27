@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import type IncomeEntity from "./entity/IncomeEntity";
-import incomeSchema from "./schema/incomeSchema";
+import type IncomeStreamEntity from "./entity/IncomeStreamEntity";
+import incomeStreamSchema from "./schema/incomeSchema";
 
-export const IncomeModel = mongoose.model<IncomeEntity>(
-  "Income",
-  incomeSchema,
-  "incomes",
+export const IncomeStreamModel = mongoose.model<IncomeStreamEntity>(
+  "IncomeStream",
+  incomeStreamSchema,
+  "income-streams",
 );

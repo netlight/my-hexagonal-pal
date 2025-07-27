@@ -1,14 +1,14 @@
 import mongoose, { Schema } from "mongoose";
-import type IncomeEntity from "../entity/IncomeEntity";
-import incomeSourceSchema from "./incomeSourceSchema";
+import type IncomeStreamEntity from "../entity/IncomeStreamEntity";
+import earningSchema from "./earningSchema";
 
-const {Types} = Schema;
+const { Types } = Schema;
 
-const incomeSchema = new mongoose.Schema<IncomeEntity>(
+const incomeSchema = new mongoose.Schema<IncomeStreamEntity>(
   {
     id: Types.UUID,
     name: Types.String,
-    sources: [incomeSourceSchema],
+    earnings: [earningSchema],
   },
   { strict: true, timestamps: true, versionKey: false },
 );

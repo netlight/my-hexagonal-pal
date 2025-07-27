@@ -1,20 +1,18 @@
 import type { Budget } from "../../domain/model/expense/budget";
 import { validateNoOverspending } from "../../domain/service/balanceDomainService";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
-import type { IncomeApplicationService } from "../service/IncomeApplicationService";
+import type IncomeStreamPersistencePort from "../port/incomeStreamPersistencePort";
 
 export type CreateBudgetUseCase = (budget: Budget) => Promise<Budget>;
 
-const createBudget: (
-  ports: {
-    getAllBudgetsBy: BudgetPersistencePort["getAllByIncomeId"];
-    persist: BudgetPersistencePort["persist"];
-  },
-  appServices: { getIncomeBy: IncomeApplicationService["getById"] },
-) => CreateBudgetUseCase = (ports, appServices) => async (budget) => {
-  const income = await appServices.getIncomeBy(budget.incomeId);
-  const existingBudgets = await ports.getAllBudgetsBy(budget.incomeId);
-  validateNoOverspending(existingBudgets.concat(budget), income);
+const createBudget: (ports: {
+  getAllBudgets: BudgetPersistencePort["findAll"];
+  getAllIncomeStreams: IncomeStreamPersistencePort["findAll"];
+  persist: BudgetPersistencePort["persist"];
+}) => CreateBudgetUseCase = (ports) => async (budget) => {
+  const allIncomeStreams = await ports.getAllIncomeStreams();
+  const existingBudgets = await ports.getAllBudgets();
+  validateNoOverspending(existingBudgets.concat(budget), allIncomeStreams);
 
   return await ports.persist(budget);
 };

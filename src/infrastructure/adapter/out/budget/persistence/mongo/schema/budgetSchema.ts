@@ -2,12 +2,11 @@ import mongoose, { Schema } from "mongoose";
 import type BudgetEntity from "../entity/budgetEntity";
 import expenseSchema from "./expenseSchema";
 
-const {Types} = Schema;
+const { Types } = Schema;
 
 const budgetSummarySchema = new mongoose.Schema<BudgetEntity>(
   {
     id: Types.UUID,
-    incomeId: Types.UUID,
     name: Types.String,
     limit: Types.Number,
     expenses: [expenseSchema],

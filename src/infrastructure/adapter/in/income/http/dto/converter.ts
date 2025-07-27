@@ -1,32 +1,32 @@
 import type {
-  IncomeDto,
-  IncomeSourceDto,
-  NewIncomeDto,
-  NewIncomeSourceDto,
+  EarningDto,
+  IncomeStreamDto,
+  NewEarning,
+  NewIncomeStreamDto,
 } from "./income";
 import {
-  Income,
-  IncomeId,
-} from "../../../../../../core/domain/model/income/income";
+  IncomeStream,
+  IncomeStreamId,
+} from "../../../../../../core/domain/model/income/incomeStream";
 import {
-  IncomeSource,
-  IncomeSourceId,
-} from "../../../../../../core/domain/model/income/incomeSource";
+  Earning,
+  EarningId,
+} from "../../../../../../core/domain/model/income/earning";
 
-export const IncomeDtoConverter = {
-  toDomain: (dto: NewIncomeDto): Income =>
-    new Income(new IncomeId(), dto.name, []),
-  toDto: (domain: Income): IncomeDto => ({
+export const IncomeStreamDtoConverter = {
+  toDomain: (dto: NewIncomeStreamDto): IncomeStream =>
+    new IncomeStream(new IncomeStreamId(), dto.name, []),
+  toDto: (domain: IncomeStream): IncomeStreamDto => ({
     id: domain.id.value,
     name: domain.name,
-    sources: domain.sources.map(IncomeSourceDtoConverter.toDto),
+    earnings: domain.earnings.map(EarningsDtoConverter.toDto),
   }),
 };
 
-export const IncomeSourceDtoConverter = {
-  toDomain: (dto: NewIncomeSourceDto): IncomeSource =>
-    new IncomeSource(new IncomeSourceId(), dto.name, dto.amount),
-  toDto: (domain: IncomeSource): IncomeSourceDto => ({
+export const EarningsDtoConverter = {
+  toDomain: (dto: NewEarning): Earning =>
+    new Earning(new EarningId(), dto.name, dto.amount),
+  toDto: (domain: Earning): EarningDto => ({
     id: domain.id.value,
     name: domain.name,
     amount: domain.amount,

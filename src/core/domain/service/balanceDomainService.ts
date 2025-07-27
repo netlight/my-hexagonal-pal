@@ -1,16 +1,20 @@
 import type { Budget } from "../model/expense/budget";
-import type { Income } from "../model/income/income";
+import type { IncomeStream } from "../model/income/incomeStream";
 import BudgetOverspendingError from "../error/budget/budgetOverspendingError";
 
 export const validateNoOverspending = (
   budgets: Budget[],
-  income: Income,
+  incomeStreams: IncomeStream[],
 ): void => {
   const totalSpent = budgets.reduce(
     (prev, curr) => prev + curr.limit.amount,
     0,
   );
-  if (totalSpent > income.totalIncome) {
-    throw new BudgetOverspendingError(income, totalSpent);
+  const sumofAllIncomeStreams = incomeStreams.reduce(
+    (prev, curr) => prev + curr.totalIncome,
+    0,
+  );
+  if (totalSpent > sumofAllIncomeStreams) {
+    throw new BudgetOverspendingError(sumofAllIncomeStreams, totalSpent);
   }
 };

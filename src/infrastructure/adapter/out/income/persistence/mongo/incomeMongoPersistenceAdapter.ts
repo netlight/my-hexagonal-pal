@@ -1,23 +1,25 @@
-import type IncomePersistencePort from "../../../../../../core/application/port/incomePersistencePort";
-import { IncomeModel } from "./models";
+import type IncomeStreamPersistencePort from "../../../../../../core/application/port/incomeStreamPersistencePort";
+import { IncomeStreamModel } from "./models";
 import { IncomeEntityConverter } from "./entity/converters";
 
-export const findById: IncomePersistencePort["getById"] = async (id) => {
-  const entity = await IncomeModel.findOne({ id: id.value });
+export const findById: IncomeStreamPersistencePort["findBy"] = async (id) => {
+  const entity = await IncomeStreamModel.findOne({ id: id.value });
   if (entity !== null) {
     return IncomeEntityConverter.toDomain(entity);
   }
   return undefined;
 };
 
-export const findAll: IncomePersistencePort["getAll"] = async () => {
-  const entities = await IncomeModel.find();
+export const findAll: IncomeStreamPersistencePort["findAll"] = async () => {
+  const entities = await IncomeStreamModel.find();
   return entities.map(IncomeEntityConverter.toDomain);
 };
 
-export const upsert: IncomePersistencePort["persist"] = async (income) => {
+export const upsert: IncomeStreamPersistencePort["persist"] = async (
+  income,
+) => {
   const entity = IncomeEntityConverter.toEntity(income);
-  const upserted = await IncomeModel.findOneAndUpdate(
+  const upserted = await IncomeStreamModel.findOneAndUpdate(
     { id: entity.id },
     entity,
     {
@@ -28,9 +30,9 @@ export const upsert: IncomePersistencePort["persist"] = async (income) => {
   return IncomeEntityConverter.toDomain(upserted);
 };
 
-const IncomeMongoPersistenceAdapter: IncomePersistencePort = {
-  getById: findById,
-  getAll: findAll,
+const IncomeMongoPersistenceAdapter: IncomeStreamPersistencePort = {
+  findBy: findById,
+  findAll,
   persist: upsert,
 };
 

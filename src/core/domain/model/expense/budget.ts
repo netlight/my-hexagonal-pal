@@ -1,7 +1,6 @@
 import type Limit from "./limit";
 import type { Expense, ExpenseId } from "./expense";
 import { UniqueId } from "../uniqueId";
-import type { IncomeId } from "../income/income";
 import ExpenseDateOutOfBoundsError from "../../error/expense/expenseDateOutOfBoundsError";
 import BudgetLimitReachedError from "../../error/budget/budgetLimitReachedError";
 
@@ -10,7 +9,6 @@ export class BudgetId extends UniqueId {}
 export class Budget {
   constructor(
     public readonly id: BudgetId,
-    public readonly incomeId: IncomeId,
     public name: string,
     public limit: Limit,
     public expenses: Expense[],

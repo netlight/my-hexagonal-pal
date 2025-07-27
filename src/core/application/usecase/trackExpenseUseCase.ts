@@ -12,7 +12,7 @@ const trackExpense: (
   ports: {
     persist: BudgetPersistencePort["persist"];
   },
-  appServices: { getBudgetBy: BudgetApplicationService["getById"] },
+  appServices: { getBudgetBy: BudgetApplicationService["findBy"] },
 ) => TrackExpenseUseCase =
   (ports, appServices) => async (budgetId, expense) => {
     const budget = await appServices.getBudgetBy(budgetId);

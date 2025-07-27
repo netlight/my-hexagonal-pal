@@ -5,13 +5,13 @@ import BudgetNotFoundError from "../../domain/error/budget/budgetNotFoundError";
 import ExpenseNotFoundError from "../../domain/error/expense/expenseNotFoundError";
 
 export interface BudgetApplicationService {
-  getById: (id: BudgetId) => Promise<Budget>;
-  getByExpenseId: (id: ExpenseId) => Promise<Budget>;
+  findBy: (id: BudgetId) => Promise<Budget>;
+  findForExpenseId: (id: ExpenseId) => Promise<Budget>;
 }
 
 export const getBudgetById: (ports: {
-  getBudgetBy: BudgetPersistencePort["getById"];
-}) => BudgetApplicationService["getById"] = (ports) => async (id) => {
+  getBudgetBy: BudgetPersistencePort["findBy"];
+}) => BudgetApplicationService["findBy"] = (ports) => async (id) => {
   const budget = await ports.getBudgetBy(id);
   if (budget === undefined) {
     throw new BudgetNotFoundError(id);
@@ -21,8 +21,8 @@ export const getBudgetById: (ports: {
 };
 
 export const getBudgetByExpenseId: (ports: {
-  getBudgetBy: BudgetPersistencePort["getByExpenseId"];
-}) => BudgetApplicationService["getByExpenseId"] = (ports) => async (id) => {
+  getBudgetBy: BudgetPersistencePort["findForExpenseId"];
+}) => BudgetApplicationService["findForExpenseId"] = (ports) => async (id) => {
   const budget = await ports.getBudgetBy(id);
   if (budget === undefined) {
     throw new ExpenseNotFoundError(id);

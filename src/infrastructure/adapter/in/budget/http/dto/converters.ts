@@ -5,14 +5,12 @@ import {
   Budget,
   BudgetId,
 } from "../../../../../../core/domain/model/expense/budget";
-import { IncomeId } from "../../../../../../core/domain/model/income/income";
 import Limit from "../../../../../../core/domain/model/expense/limit";
 
 export const NewBudgetDtoConverter = {
-  toDomain: (incomeId: string, dto: NewBudgetDto): Budget =>
+  toDomain: (dto: NewBudgetDto): Budget =>
     new Budget(
       new BudgetId(),
-      new IncomeId(incomeId),
       dto.name,
       new Limit(dto.limit),
       [],
@@ -24,7 +22,6 @@ export const NewBudgetDtoConverter = {
 export const BudgetDtoConverter = {
   toDto: (domain: Budget): BudgetDto => ({
     id: domain.id.value,
-    incomeId: domain.incomeId.value,
     limit: domain.limit.amount,
     expenses: domain.expenses.map(ExpenseDtoConverter.toDto),
     name: domain.name,

@@ -5,23 +5,21 @@ info:
   description: API of the personal finance budgeting app My Finance Pal
 tags:
   - name: expenses
-    description: Expenses of budgets
+    description: Spend money
   - name: budgets
     description: Managing budgets
-  - name: incomes
+  - name: income
     description: Earn money
 servers:
   - url: http://localhost:3000
     description: Local Development
 paths:
-  /incomes/{incomeId}/budgets:
+  /budgets:
     post:
       tags:
         - budgets
       description: Create a new budget
       operationId: createBudget
-      parameters:
-        - $ref: "#/components/parameters/IncomeIdParam"
       requestBody:
         required: true
         content:
@@ -67,7 +65,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Budget"
-  /incomes/{incomeId}/budgets/{budgetId}/expenses:
+  /budgets/{budgetId}:
+    get:
+      tags:
+        - budgets
+      description: Find a budget by its ID
+      operationId: findBudgetById
+      parameters:
+        - $ref: "#/components/parameters/BudgetIdParam"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+        404:
+          description: Budget not found
+  /budgets/{budgetId}/expenses:
     post:
       tags:
         - expenses
@@ -75,7 +90,6 @@ paths:
       operationId: trackExpense
       parameters:
         - $ref: "#/components/parameters/BudgetIdParam"
-        - $ref: "#/components/parameters/IncomeIdParam"
       requestBody:
         required: true
         content:
@@ -101,60 +115,60 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /incomes:
+  /income-streams:
     post:
       tags:
-        - incomes
-      description: Add a new aggregation of income sources
-      operationId: createIncome
+        - income
+      description: Add a new aggregation of a type of income
+      operationId: createIncomeStream
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewIncome"
+              $ref: "#/components/schemas/NewIncomeStream"
       responses:
         201:
-          description: Income created
+          description: Income stream created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Income"
+                $ref: "#/components/schemas/IncomeStream"
     get:
       tags:
-        - incomes
-      description: Get all stored incomes
-      operationId: getAllIncomes
+        - income
+      description: Get all stored income streams
+      operationId: getAllIncomeStreams
       responses:
         200:
           description: OK
           content:
-            applicatioin/json:
+            application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Income"
-  /incomes/{incomeId}/sources:
+                  $ref: "#/components/schemas/IncomeStream"
+  /income-streams/{incomeStreamId}/earnings:
     post:
       tags:
-        - incomes
-      description: Add a new source for a single income
-      operationId: addIncomeSource
+        - income
+      description: Register an earning under an income stream
+      operationId: registerEarning
       parameters:
-        - $ref: "#/components/parameters/IncomeIdParam"
+        - $ref: "#/components/parameters/IncomeStreamIdParam"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewIncomeSource"
+              $ref: "#/components/schemas/NewEarning"
       responses:
         201:
-          description: Income source created
+          description: Earning registered
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/IncomeSource"
+                $ref: "#/components/schemas/Earning"
         400:
           description: Invalid income payload
           content:
@@ -176,18 +190,18 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/BudgetId"
-    IncomeIdParam:
+    IncomeStreamIdParam:
       in: path
-      name: incomeId
+      name: incomeStreamId
       required: true
       schema:
-        $ref: "#/components/schemas/IncomeId"
+        $ref: "#/components/schemas/IncomeStreamId"
   schemas:
-    IncomeSourceId:
+    EarningId:
       type: string
-      description: Unique identifier of an income source
+      description: Unique identifier of an earning
       example: c0f45af3-3fd1-4053-8e4b-d907e002313b
-    NewIncomeSource:
+    NewEarning:
       type: object
       description: New source of incoming money
       required:
@@ -196,51 +210,51 @@ components:
       properties:
         name:
           type: string
-          description: Name of the income source
+          description: Name of the earning event
           example: Salary
         amount:
           type: number
           description: Net amount of incoming money
           example: 213000
-    IncomeSource:
+    Earning:
       allOf:
         - type: object
-          description: Source of incoming money
+          description: Event of incoming money
           required:
             - id
           properties:
             id:
-              $ref: "#/components/schemas/IncomeSourceId"
-        - $ref: "#/components/schemas/NewIncomeSource"
-    IncomeId:
+              $ref: "#/components/schemas/EarningId"
+        - $ref: "#/components/schemas/NewEarning"
+    IncomeStreamId:
       type: string
-      description: Unique identifier of an income
+      description: Unique identifier of an income stream
       example: 1ff8884f-4a02-4f59-b757-188f33833abd
-    NewIncome:
+    NewIncomeStream:
       type: object
-      description: New aggregation of all income source under one summed up income
+      description: New aggregation of earnings under one summed up income stream
       required:
         - name
       properties:
         name:
           type: string
-          description: Name of an income
-          example: Household Income
-    Income:
+          description: Name of an income stream
+          example: Full-time position at Cinema Munich
+    IncomeStream:
       allOf:
         - type: object
-          description: Aggregate of all income source under one summed up income
+          description: Aggregate of earnings under one summed up income stream
           required:
             - id
-            - sources
+            - earnings
           properties:
             id:
-              $ref: "#/components/schemas/IncomeId"
-            sources:
+              $ref: "#/components/schemas/IncomeStreamId"
+            earnings:
               type: array
               items:
-                $ref: "#/components/schemas/IncomeSource"
-        - $ref: "#/components/schemas/NewIncome"
+                $ref: "#/components/schemas/Earning"
+        - $ref: "#/components/schemas/NewIncomeStream"
     BudgetId:
       type: string
       description: Unique identifier of one budget
@@ -277,13 +291,10 @@ components:
           description: Planned money to be available for tracking expenses related to a certain purpose over a period of time
           required:
             - id
-            - incomeId
             - expenses
           properties:
             id:
               $ref: "#/components/schemas/BudgetId"
-            incomeId:
-              $ref: "#/components/schemas/IncomeId"
             expenses:
               type: array
               items:

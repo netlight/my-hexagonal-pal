@@ -1,6 +1,6 @@
 import type { components } from "../../../../../../../generated/api";
 
-export type IncomeDto = components["schemas"]["Income"];
-export type NewIncomeDto = components["schemas"]["NewIncome"];
-export type NewIncomeSourceDto = components["schemas"]["NewIncomeSource"];
-export type IncomeSourceDto = components["schemas"]["IncomeSource"];
+export type IncomeStreamDto = components["schemas"]["IncomeStream"];
+export type NewIncomeStreamDto = components["schemas"]["NewIncomeStream"];
+export type NewEarning = components["schemas"]["NewEarning"];
+export type EarningDto = components["schemas"]["Earning"];
