@@ -1,5 +1,5 @@
 import "./preStart"; // always have this at the top of this file in order to execute these scripts first
-import * as http from "http";
+import * as http from "node:http";
 import app from "./app";
 import { listenToErrorEvents } from "./middleware/error/errorHandler";
 import logger from "../../../../logging/logger";

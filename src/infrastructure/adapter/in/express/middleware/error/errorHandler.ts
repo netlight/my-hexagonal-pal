@@ -1,18 +1,18 @@
-import type * as Http from "http";
+import type * as Http from "node:http";
 import logger from "../../../../../../logging/logger";
-import * as util from "util";
-import { type NextFunction, type Request, type Response } from "express";
+import * as util from "node:util";
+import type { Request, Response } from "express";
 import mapDomainErrors from "./domainErrorMapper";
 
 // This whole handling logic is copied from https://github.com/practicajs/practica was and modified to fit our application
 
-let httpServerRef: Http.Server;
+let httpServerRef: Http.Server | undefined = undefined;
 
 export class AppError extends Error {
   constructor(
     public name: string,
     public message: string,
-    public HTTPStatus: number = 500,
+    public HTTPStatus = 500,
     public isTrusted = true,
     public cause?: unknown,
   ) {
@@ -23,12 +23,11 @@ export class AppError extends Error {
 // Listen to the global process-level error events
 export const listenToErrorEvents = (httpServer: Http.Server): void => {
   httpServerRef = httpServer;
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
   process.on("uncaughtException", (error) => {
     handleError(error);
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   process.on("unhandledRejection", (reason) => {
     handleError(reason);
   });
@@ -79,7 +78,7 @@ const normalizeError = (errorToHandle: unknown): AppError => {
   }
   if (errorToHandle instanceof Error) {
     const appError = new AppError(errorToHandle.name, errorToHandle.message);
-    appError.stack = errorToHandle.stack;
+    ({ stack: appError.stack } = errorToHandle);
     return appError;
   }
   // meaning it could be any type,
@@ -92,12 +91,7 @@ const normalizeError = (errorToHandle: unknown): AppError => {
   );
 };
 
-export const errorHandler = (
-  err: Error,
-  _: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
+export const errorHandler = (err: Error, _: Request, res: Response): void => {
   err = mapDomainErrors(err);
   if (typeof err === "object") {
     const error = err as AppError;
@@ -105,10 +99,11 @@ export const errorHandler = (
       error.isTrusted = true; // Error during a specific request is usually not fatal and should not lead to process exit
     }
   }
-  // ✅ Best Practice: Pass all error to a centralized error handler so they get treated equally
+  // ✅ Best Practice: Pass all errors to a centralized error handler so they get treated equally
   handleError(err);
   res
     .status((err as AppError).HTTPStatus ?? 500)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion,@typescript-eslint/no-explicit-any  -- fine
     .json({ message: err.message, errors: (err as any).errors })
     .end();
 };

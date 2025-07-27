@@ -1,4 +1,4 @@
-import { type operations, type paths } from "../../../../../../generated/api";
+import type { operations, paths } from "../../../../../../generated/api";
 
 // Typesafe constant holding all REST endpoint paths based on the OpenAPI specification
 const apiPaths: Record<keyof operations, keyof paths> = {

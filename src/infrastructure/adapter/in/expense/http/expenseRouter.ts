@@ -4,9 +4,9 @@ import { StatusCodes } from "http-status-codes";
 import toExpressPath from "../../express/routes/toExpressPath";
 import apiPaths from "../../express/routes/apiPaths";
 import asyncHandler from "express-async-handler";
-import { type TrackExpenseUseCase } from "../../../../../core/application/usecase/trackExpenseUseCase";
+import type { TrackExpenseUseCase } from "../../../../../core/application/usecase/trackExpenseUseCase";
 import { ExpenseId } from "../../../../../core/domain/model/expense/expense";
-import { type NewExpenseDto } from "./dto/expense";
+import type { NewExpenseDto } from "./dto/expense";
 
 export const trackExpense =
   (trackExpense: TrackExpenseUseCase) =>

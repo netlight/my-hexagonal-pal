@@ -4,11 +4,11 @@ import { StatusCodes } from "http-status-codes";
 import toExpressPath from "../../express/routes/toExpressPath";
 import apiPaths from "../../express/routes/apiPaths";
 import asyncHandler from "express-async-handler";
-import { type CreateIncomeUseCase } from "../../../../../core/application/usecase/createIncomeUseCase";
+import type { CreateIncomeUseCase } from "../../../../../core/application/usecase/createIncomeUseCase";
 import { IncomeDtoConverter, IncomeSourceDtoConverter } from "./dto/converter";
-import { type AddIncomeSourceUseCase } from "../../../../../core/application/usecase/addIncomeSourceUseCase";
-import { type GetIncomesUseCase } from "../../../../../core/application/usecase/getIncomesUseCase";
-import { type NewIncomeSourceDto } from "./dto/income";
+import type { AddIncomeSourceUseCase } from "../../../../../core/application/usecase/addIncomeSourceUseCase";
+import type { GetIncomesUseCase } from "../../../../../core/application/usecase/getIncomesUseCase";
+import type { NewIncomeSourceDto } from "./dto/income";
 import { IncomeId } from "../../../../../core/domain/model/income/income";
 
 export const createIncome =
@@ -27,10 +27,9 @@ export const addIncomeSource =
   (addIncomeSource: AddIncomeSourceUseCase) =>
   async (req: Request, res: Response): Promise<void> => {
     const dto: NewIncomeSourceDto = req.body;
-    const incomeId = req.params.incomeId;
     const newIncomeSource = IncomeSourceDtoConverter.toDomain(dto);
     const createdIncomeSource = await addIncomeSource(
-      new IncomeId(incomeId),
+      new IncomeId(req.params.incomeId),
       newIncomeSource,
     );
 
@@ -41,7 +40,7 @@ export const addIncomeSource =
 
 export const getIncomes =
   (getIncomes: GetIncomesUseCase) =>
-  async (req: Request, res: Response): Promise<void> => {
+  async (_req: Request, res: Response): Promise<void> => {
     const incomes = await getIncomes();
     res.status(StatusCodes.OK).json(incomes.map(IncomeDtoConverter.toDto));
   };

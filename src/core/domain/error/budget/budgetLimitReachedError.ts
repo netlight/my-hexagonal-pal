@@ -1,6 +1,6 @@
 import { Error } from "mongoose";
 import type Limit from "../../model/expense/limit";
-import { type Expense } from "../../model/expense/expense";
+import type { Expense } from "../../model/expense/expense";
 
 class BudgetLimitReachedError extends Error {
   constructor(limit: Limit, expense: Expense) {

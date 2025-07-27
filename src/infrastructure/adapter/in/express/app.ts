@@ -5,7 +5,7 @@ import expressLogger from "./logging/expressLogger";
 import ApiRouter from "./routes/apiRouter";
 import { errorHandler } from "./middleware/error/errorHandler";
 import * as OpenApiValidator from "express-openapi-validator";
-import * as path from "path";
+import * as path from "node:path";
 import createBudgetUseCase from "../../../../core/application/usecase/createBudgetUseCase";
 import BudgetMongoPersistenceAdapter from "../../out/budget/persistence/mongo/budgetMongoPersistenceAdapter";
 import {
@@ -27,6 +27,7 @@ import getIncomesUseCase from "../../../../core/application/usecase/getIncomesUs
 import createIncomeUseCase from "../../../../core/application/usecase/createIncomeUseCase";
 import addIncomeSourceUseCase from "../../../../core/application/usecase/addIncomeSourceUseCase";
 import cors from "cors";
+import * as process from "node:process";
 
 const app = express();
 
@@ -49,7 +50,7 @@ if (environment.isProd) {
 // message specifying what exactly is the problem
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: path.join(__dirname, "..", "api", "my-finance-pal.yml"),
+    apiSpec: path.join(process.cwd(), "api", "my-finance-pal.yml"),
     // validate incoming requests
     validateRequests: true,
     // also validate our responses to the clients

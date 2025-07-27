@@ -1,7 +1,7 @@
 import type Limit from "./limit";
-import { type Expense, type ExpenseId } from "./expense";
+import type { Expense, ExpenseId } from "./expense";
 import { UniqueId } from "../uniqueId";
-import { type IncomeId } from "../income/income";
+import type { IncomeId } from "../income/income";
 import ExpenseDateOutOfBoundsError from "../../error/expense/expenseDateOutOfBoundsError";
 import BudgetLimitReachedError from "../../error/budget/budgetLimitReachedError";
 

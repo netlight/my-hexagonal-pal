@@ -1,5 +1,5 @@
 import type IncomeNotFoundError from "./income/incomeNotFoundError";
-import { type NonPositiveIncomeSourceError } from "./income/nonPositiveIncomeSourceError";
+import type { NonPositiveIncomeSourceError } from "./income/nonPositiveIncomeSourceError";
 import type ExpenseDateOutOfBoundsError from "./expense/expenseDateOutOfBoundsError";
 import type ExpenseNotFoundError from "./expense/expenseNotFoundError";
 import type BudgetLimitReachedError from "./budget/budgetLimitReachedError";

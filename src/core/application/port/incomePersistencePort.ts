@@ -1,4 +1,4 @@
-import { type Income, type IncomeId } from "../../domain/model/income/income";
+import type { Income, IncomeId } from "../../domain/model/income/income";
 
 interface IncomePersistencePort {
   getById: (id: IncomeId) => Promise<Income | undefined>;

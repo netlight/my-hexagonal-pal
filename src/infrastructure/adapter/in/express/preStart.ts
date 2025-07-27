@@ -7,8 +7,8 @@
 // NOTE: DO NOT IMPORT ANY SOURCE CODE HERE
 import dotenv from "dotenv";
 import { parse } from "ts-command-line-args";
-import path from "path";
-import * as process from "process";
+import path from "node:path";
+import * as process from "node:process";
 import { useIdGenerator } from "../../../../core/domain/model/uniqueId";
 import UUIDGenerator from "../../../lib/UUIDGenerator";
 
@@ -33,7 +33,8 @@ const args = parse<Args>(
 );
 
 // Set the env file
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-unsafe-member-access -- Fine for the exercise
 const appRootPath: string = require("app-root-path").path;
 const dotenvConfig = dotenv.config({
   path: path.join(appRootPath, "env", `${args.env}.env`),

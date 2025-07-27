@@ -1,8 +1,11 @@
-import { type Budget } from "../model/expense/budget";
-import { type Income } from "../model/income/income";
+import type { Budget } from "../model/expense/budget";
+import type { Income } from "../model/income/income";
 import BudgetOverspendingError from "../error/budget/budgetOverspendingError";
 
-export const validateNoOverspending = (budgets: Budget[], income: Income) => {
+export const validateNoOverspending = (
+  budgets: Budget[],
+  income: Income,
+): void => {
   const totalSpent = budgets.reduce(
     (prev, curr) => prev + curr.limit.amount,
     0,

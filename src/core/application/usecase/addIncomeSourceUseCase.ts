@@ -1,7 +1,7 @@
-import { type IncomeId } from "../../domain/model/income/income";
-import { type IncomeSource } from "../../domain/model/income/incomeSource";
+import type { IncomeId } from "../../domain/model/income/income";
+import type { IncomeSource } from "../../domain/model/income/incomeSource";
 import type IncomePersistencePort from "../port/incomePersistencePort";
-import { type IncomeApplicationService } from "../service/IncomeApplicationService";
+import type { IncomeApplicationService } from "../service/IncomeApplicationService";
 
 export type AddIncomeSourceUseCase = (
   incomeId: IncomeId,
@@ -17,7 +17,6 @@ const addIncomeSource: (
     income.add(incomeSource);
     const updatedIncome = await ports.persist(income);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return updatedIncome.getSourceBy(incomeSource.id)!;
   };
 

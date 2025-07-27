@@ -1,4 +1,4 @@
-import { type UniqueIdGenerator } from "../../core/domain/model/uniqueId";
+import type { UniqueIdGenerator } from "../../core/domain/model/uniqueId";
 import { v4 as uuidv4, validate as uuidValidate } from "uuid";
 
 const uuidGenerator: UniqueIdGenerator = {
@@ -7,6 +7,7 @@ const uuidGenerator: UniqueIdGenerator = {
     if (!uuidValidate(id)) {
       return [{ description: `Invalid UUID ${id}` }];
     }
+    return undefined;
   },
 };
 

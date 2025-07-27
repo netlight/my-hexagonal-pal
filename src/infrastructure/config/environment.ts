@@ -1,5 +1,5 @@
 import { cleanEnv, port, str, url } from "envalid";
-import * as process from "process";
+import * as process from "node:process";
 
 const env = cleanEnv(process.env, {
   PORT: port(),

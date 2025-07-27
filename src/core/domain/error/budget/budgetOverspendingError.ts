@@ -1,4 +1,4 @@
-import { type Income } from "../../model/income/income";
+import type { Income } from "../../model/income/income";
 
 class BudgetOverspendingError extends Error {
   constructor(

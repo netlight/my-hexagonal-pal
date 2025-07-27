@@ -1,7 +1,7 @@
-import { type Budget } from "../../domain/model/expense/budget";
+import type { Budget } from "../../domain/model/expense/budget";
 import { validateNoOverspending } from "../../domain/service/balanceDomainService";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
-import { type IncomeApplicationService } from "../service/IncomeApplicationService";
+import type { IncomeApplicationService } from "../service/IncomeApplicationService";
 
 export type CreateBudgetUseCase = (budget: Budget) => Promise<Budget>;
 
