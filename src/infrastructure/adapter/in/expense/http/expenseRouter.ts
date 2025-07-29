@@ -9,12 +9,12 @@ import { ExpenseId } from "../../../../../core/domain/model/expense/expense";
 import type { NewExpenseDto } from "./dto/expense";
 
 export const trackExpense =
-  (trackExpense: TrackExpenseUseCase) =>
+  (useCase: TrackExpenseUseCase) =>
   async (req: Request, res: Response): Promise<void> => {
     const newExpenseDto: NewExpenseDto = req.body;
     const budgetId: string = req.params.budgetId;
     let expense = NewExpenseDtoConverter.toDomain(newExpenseDto);
-    expense = await trackExpense(new ExpenseId(budgetId), expense);
+    expense = await useCase.track(new ExpenseId(budgetId), expense);
     res.status(StatusCodes.CREATED).json(ExpenseDtoConverter.toDto(expense));
   };
 

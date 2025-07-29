@@ -35,6 +35,7 @@ export default [
       "@typescript-eslint/no-unsafe-member-access": "warn",
       "@typescript-eslint/prefer-nullish-coalescing": "warn",
       "logical-assignment-operators": "warn",
+      "@typescript-eslint/class-methods-use-this": "off",
 
       // Unsafe assignments are ok for this exercise
       "@typescript-eslint/no-unsafe-assignment": "off",

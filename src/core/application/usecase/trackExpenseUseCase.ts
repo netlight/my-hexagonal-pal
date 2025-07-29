@@ -3,23 +3,17 @@ import type { BudgetId } from "../../domain/model/expense/budget";
 import type { BudgetApplicationService } from "../service/budgetApplicationService";
 import type BudgetPersistencePort from "../port/budgetPersistencePort";
 
-export type TrackExpenseUseCase = (
-  budgetId: BudgetId,
-  expense: Expense,
-) => Promise<Expense>;
+export class TrackExpenseUseCase {
+  constructor(
+    private readonly budgetPersistencePort: BudgetPersistencePort,
+    private readonly budgetAppService: BudgetApplicationService,
+  ) {}
 
-const trackExpense: (
-  ports: {
-    persist: BudgetPersistencePort["persist"];
-  },
-  appServices: { getBudgetBy: BudgetApplicationService["findBy"] },
-) => TrackExpenseUseCase =
-  (ports, appServices) => async (budgetId, expense) => {
-    const budget = await appServices.getBudgetBy(budgetId);
+  track = async (budgetId: BudgetId, expense: Expense): Promise<Expense> => {
+    const budget = await this.budgetAppService.getBudgetById(budgetId);
     budget.register(expense);
-    const updatedBudget = await ports.persist(budget);
+    const updatedBudget = await this.budgetPersistencePort.persist(budget);
 
     return updatedBudget.getExpenseBy(expense.id)!;
   };
-
-export default trackExpense;
+}
