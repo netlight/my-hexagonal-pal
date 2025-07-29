@@ -8,7 +8,7 @@ export class BudgetId extends UniqueId {}
 
 export class Budget {
   constructor(
-    public readonly id: BudgetId,
+    readonly id: BudgetId,
     public name: string,
     public limit: Limit,
     public expenses: Expense[],
