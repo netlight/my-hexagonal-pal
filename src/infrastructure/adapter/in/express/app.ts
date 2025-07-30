@@ -16,7 +16,7 @@ import findBudgetUseCase from "../../../../core/application/usecase/findBudgetUs
 import { BudgetApplicationService } from "../../../../core/application/service/budgetApplicationService";
 import BudgetRouter from "../budget/http/budgetRouter";
 import ExpenseRouter from "../expense/http/expenseRouter";
-import IncomeStreamRouter from "../income/http/incomeRouter";
+import IncomeStreamRouter from "../income/http/incomeStreamRouter";
 import getAllIncomeStreams from "../../../../core/application/usecase/getAllIncomeStreamsUseCase";
 import createIncomeUseCase from "../../../../core/application/usecase/openNewIncomeStreamUseCase";
 import registerEarningUseCase from "../../../../core/application/usecase/registerEarningUseCase";

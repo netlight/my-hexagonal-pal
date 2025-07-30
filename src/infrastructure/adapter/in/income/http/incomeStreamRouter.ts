@@ -50,7 +50,7 @@ export const getAllIncomeStreams =
       .json(incomes.map(IncomeStreamDtoConverter.toDto));
   };
 
-const IncomeRouter = (
+const IncomeStreamRouter = (
   getAllIncomeStreamsUseCase: GetAllIncomeStreamsUseCase,
   openNewIncomeStreamUseCase: OpenNewIncomeStreamUseCase,
   registerEarningUseCase: RegisterEarningUseCase,
@@ -72,4 +72,4 @@ const IncomeRouter = (
   return router;
 };
 
-export default IncomeRouter;
+export default IncomeStreamRouter;
